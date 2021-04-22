@@ -1,0 +1,11 @@
+{% extends 'admin/base.html' %}
+{% block title %}Meu titulo{% endblock %}
+{% block content %}
+    <h1>Página de cadastro de produto</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Cadastrar Meu Botão">
+    </form>
+{% endblock %}
+

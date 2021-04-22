@@ -1,0 +1,10 @@
+{% extends 'admin/base.html' %}
+{% load bootstrap %}
+{% block content  %}
+<h1>Minha página de cadastro de venda!</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form|bootstrap }}
+    <input type="submit" value="Atualizar">
+</form>
+{% endblock %}
