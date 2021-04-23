@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import CreateView, ListView, UpdateView
-from .models import Venda, Produto, CadastroBebida, CadastroHamburgue
+from .models import Venda, Produto, Bebida, Hamburgue, Pizza
 from django.urls import reverse_lazy
 # Create your views here.
 
@@ -44,7 +44,7 @@ class VendaUpdateView(UpdateView):
 
 
 class BebidaCreateView(CreateView):
-    model = CadastroBebida
+    model = Bebida
     template_name = 'cadastrar/bebida.html'
 
     fields = '__all__'
@@ -54,13 +54,13 @@ class BebidaCreateView(CreateView):
 
 
 class BebidaListView(ListView):
-    model = CadastroBebida
+    model = Bebida
     template_name = 'listar/bebida.html'
     paginate_by = 3
 
 
 class BebidaUpdateView(UpdateView):
-    model = CadastroBebida
+    model = Bebida
     template_name = 'atualizar/bebida.html'
 
     fields = '__all__'
@@ -72,7 +72,7 @@ class BebidaUpdateView(UpdateView):
 
 
 class HamburgueCreateView(CreateView):
-    model = CadastroHamburgue
+    model = Hamburgue
     template_name = 'cadastrar/hamburgue.html'
 
     fields = '__all__'
@@ -82,13 +82,13 @@ class HamburgueCreateView(CreateView):
 
 
 class HamburgueListView(ListView):
-    model = CadastroHamburgue
+    model = Hamburgue
     template_name = 'listar/hamburgue.html'
     paginate_by = 3
 
 
 class HamburgueUpdateView(UpdateView):
-    model = CadastroHamburgue
+    model = Hamburgue
     template_name = 'atualizar/hamburgue.html'
 
     fields = '__all__'
@@ -96,6 +96,33 @@ class HamburgueUpdateView(UpdateView):
     def get_success_url(self):
         return reverse_lazy('listar_hamburgue')
 
+
+
+
+class PizzaCreateView(CreateView):
+    model = Pizza
+    template_name = 'cadastrar/pizza.html'
+
+    fields = '__all__'
+
+    def get_success_url(self):
+        return reverse_lazy("listar_pizza")
+
+
+class PizzaListView(ListView):
+    model = Pizza
+    template_name = 'listar/pizza.html'
+    paginate_by = 3
+
+
+class PizzaUpdateView(UpdateView):
+    model = Pizza
+    template_name = 'atualizar/pizza.html'
+
+    fields = '__all__'
+
+    def get_success_url(self):
+        return reverse_lazy('listar_pizza')
 
 
 

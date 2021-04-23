@@ -39,7 +39,7 @@ class Cliente(models.Model):
     def __str__(self):
         return self.nome
 
-class CadastroBebida(models.Model):
+class Bebida(models.Model):
     marca = models.CharField(max_length=255, blank=False, null=False)
     valor = models.DecimalField(max_digits=12, decimal_places=2, null=False, blank=False)
     quant_litro = models.IntegerField(blank=False, null=False)
@@ -49,10 +49,20 @@ class CadastroBebida(models.Model):
 
 
 
-class CadastroHamburgue(models.Model):
+class Hamburgue(models.Model):
     sabor = models.CharField(max_length=255, blank=False, null=False)
     valor = models.DecimalField(max_digits=12, decimal_places=2, null=False, blank=False)
-    quant_kg = models.IntegerField(blank=False, null=False)
+    quantidade = models.IntegerField(blank=False, null=False)
+
+    def __str__(self):
+        return str(self.pk) + ' - ' + self.sabor
+
+
+class Pizza(models.Model):
+    sabor = models.CharField(max_length=255, blank=False, null=False)
+    quantidade = models.IntegerField(blank=False, null=False)
+    valor = models.DecimalField(max_digits=12, decimal_places=2, null=False, blank=False)
+
 
     def __str__(self):
         return str(self.pk) + ' - ' + self.sabor
