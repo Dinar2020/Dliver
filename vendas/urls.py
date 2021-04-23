@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from .views import VendaCreateView, ProdutoCreateView, VendaListView, VendaUpdateView, BebidaCreateView, BebidaListView, BebidaUpdateView
+from .views import VendaCreateView, ProdutoCreateView, VendaListView, VendaUpdateView, BebidaCreateView, BebidaListView, BebidaUpdateView, HamburgueCreateView, HamburgueListView, HamburgueUpdateView
 
 urlpatterns = [
     path('cadastrar/venda', VendaCreateView.as_view(), name="cadastrar_venda"),
@@ -10,6 +10,9 @@ urlpatterns = [
     path('cadastrar/bebida', BebidaCreateView.as_view(), name="cadastrar_bebida"),
     path('listar/bebida', BebidaListView.as_view(), name="listar_bebida"),
     path('atualizar/venda/<int:pk>', BebidaUpdateView.as_view(), name="atualizar_bebida"),
+    path('cadastrar/hamburgue', HamburgueCreateView.as_view(), name="cadastrar_hamburgue"),
+    path('listar/hamburgue', HamburgueListView.as_view(), name="listar_hamburgue"),
+    path('atualizar/venda/<int:pk>', HamburgueUpdateView.as_view(), name="atualizar_hamburgue"),
 
 ]
 
