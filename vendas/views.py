@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import CreateView, ListView, UpdateView
-from .models import Venda, Produto
+from .models import Venda, Produto, CadastroBebida
 from django.urls import reverse_lazy
 # Create your views here.
 
@@ -40,4 +40,35 @@ class VendaUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('listar_venda')
+
+
+
+class BebidaCreateView(CreateView):
+    model = CadastroBebida
+    template_name = 'cadastrar/bebida.html'
+
+    fields = '__all__'
+
+    def get_success_url(self):
+        return reverse_lazy("listar_bebida")
+
+
+class BebidaListView(ListView):
+    model = CadastroBebida
+    template_name = 'listar/bebida.html'
+    paginate_by = 3
+
+
+class BebidaUpdateView(UpdateView):
+    model = CadastroBebida
+    template_name = 'atualizar/bebida.html'
+
+    fields = '__all__'
+
+    def get_success_url(self):
+        return reverse_lazy('listar_bebida')
+
+
+
+
 
