@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 oioioioioi
+=======
+trestando
+>>>>>>> origin/main
