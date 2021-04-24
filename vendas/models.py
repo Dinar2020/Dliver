@@ -45,13 +45,31 @@ class CadastroAtendente(models.Model):
     email_atendente = models.EmailField(blank=False, null=True, verbose_name='E-mail Atendente')
     cpf = models.CharField(max_length=11, blank=False, null=False, verbose_name='CPF do Atendente')
     escolha_de_genero = (('M', 'Masculino'), ('F', 'Feminino'), ('O', 'Outro'))
-    genero = models.CharField(choices=escolha_de_genero, max_length=128 , verbose_name='Gênero')
+    genero = models.CharField(choices=escolha_de_genero, max_length=128, verbose_name='Gênero')
     possui_comorbidade = models.BooleanField(default=False)
     observacao = models.TextField(blank=True, null=True, verbose_name="Observação Comorbidade")
     telefone = models.CharField(max_length=12, blank=False, null=False, verbose_name='Telefone')
     data_de_nascimento = forms.DateField()
-    endereco = models.CharField(max_length=200 , verbose_name='Endereço')
+    endereco = models.CharField(max_length=200, verbose_name='Endereço')
     salvar_foto_perfil = models.FileField(upload_to='foto_atendente/', verbose_name='Foto de Perfil')
 
     def __str__(self):
         return self.nome
+
+
+class CadastroLocalDeEntrega(models.Model):
+    favoritar_como = (('C', 'Casa'), ('T', 'Trabalho'))
+    favoritar = models.CharField(choices=favoritar_como, max_length=128, verbose_name='Favoritar como')
+    endereco = models.CharField(max_length=200, verbose_name='Endereço')
+    complemento = models.CharField(max_length=100, null=False, blank=False, verbose_name='Complemento')
+    cep = models.CharField(max_length=50, null=False, blank=False, verbose_name='CEP')
+    bairro = models.CharField(max_length=50, null=False, blank=False, verbose_name='Bairro')
+    municipio = models.CharField(max_length=50, null=False, blank=False, verbose_name='Município')
+    todas_uf = (('Acre', 'AC'), ('Alagoas', 'AL'), ('Amapá', 'AP'), ('Amazonas', 'AM'), ('Bahia', 'BA'),
+                ('Ceará', 'CE'), ('Distrito Federa', 'DF'), ('Espírito Santo', 'ES'), ('Goiás', 'GO'),
+                ('Maranhão', 'MA'), ('Mato Grosso', 'MT'), ('Mato Grosso do Sul', 'MS'), ('Minas Gerais', 'MG'),
+                ('Pará', 'PA'), ('Paraíba', 'PB'), ('Paraná', 'PR'), ('Pernambuco', 'PE'), ('Piauí', ' PI'),
+                ('Rio de Janeiro', 'RJ'), ('Rio Grande do Norte', 'RN'), ('Rio Grande do Sul', 'RS'),
+                ('Rondônia', 'RO'), ('Roraima', 'RR'), ('Santa Catarina', 'SC'), ('São Paulo', 'SP'),
+                ('Sergipe', ' SE'), ('Tocantins', 'TO'))
+    uf = models.CharField(choices=todas_uf, max_length=128, verbose_name='UF')
