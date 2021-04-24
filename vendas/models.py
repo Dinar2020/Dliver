@@ -34,15 +34,20 @@ class Produto(models.Model):
 class Cliente(models.Model):
     nome = models.CharField(max_length=255, blank=False, null=False, verbose_name='Nome completo')
     cpf = models.CharField(max_length=11, blank=False, null=False, verbose_name='CPF')
-    email_cliente = models.EmailField(blank=True, null=True, verbose_name='E-mail')
+    endere = models.CharField(max_length=20, blank=False, null=True, verbose_name='Endereço completo')
+    cidade = models.CharField(max_length=20, blank=False, null=True, verbose_name='Cidade')
+    cep = models.CharField(max_length=20, blank=False, null=True, verbose_name='CEP')
+    email_Cliente = models.EmailField(blank=False, null=True, verbose_name='E-mail')
+    tel = models.CharField(max_length=12, blank=False, null=True, verbose_name='Telefone')
 
     def __str__(self):
         return self.nome
 
+
 class Bebida(models.Model):
     marca = models.CharField(max_length=255, blank=False, null=False)
     valor = models.DecimalField(max_digits=12, decimal_places=2, null=False, blank=False)
-    quant_litro = models.IntegerField(blank=False, null=False)
+    tamanho = models.CharField(max_length= 10, blank=False, null=False)
 
     def __str__(self):
         return str(self.pk) + ' - ' + self.marca
@@ -52,7 +57,7 @@ class Bebida(models.Model):
 class Hamburgue(models.Model):
     sabor = models.CharField(max_length=255, blank=False, null=False)
     valor = models.DecimalField(max_digits=12, decimal_places=2, null=False, blank=False)
-    quantidade = models.IntegerField(blank=False, null=False)
+    tamanho = models.CharField(max_length= 10, blank=False, null=False)
 
     def __str__(self):
         return str(self.pk) + ' - ' + self.sabor
@@ -60,7 +65,7 @@ class Hamburgue(models.Model):
 
 class Pizza(models.Model):
     sabor = models.CharField(max_length=255, blank=False, null=False)
-    quantidade = models.IntegerField(blank=False, null=False)
+    tamanho = models.CharField(max_length= 10, blank=False, null=False)
     valor = models.DecimalField(max_digits=12, decimal_places=2, null=False, blank=False)
 
 
@@ -69,7 +74,7 @@ class Pizza(models.Model):
 
 class Passaporte(models.Model):
     sabor = models.CharField(max_length=255, blank=False, null=False)
-    quantidade = models.IntegerField(blank=False, null=False)
+    tamanho = models.CharField(max_length= 10, blank=False, null=False)
     valor = models.DecimalField(max_digits=12, decimal_places=2, null=False, blank=False)
 
 
@@ -78,9 +83,20 @@ class Passaporte(models.Model):
 
 class Pastel(models.Model):
     sabor = models.CharField(max_length=255, blank=False, null=False)
-    quantidade = models.IntegerField(blank=False, null=False)
+    tamanho = models.CharField(max_length= 10, blank=False, null=False)
     valor = models.DecimalField(max_digits=12, decimal_places=2, null=False, blank=False)
 
 
     def __str__(self):
         return str(self.pk) + ' - ' + self.sabor
+
+class ClientePegueLeve(models.Model):
+    nome = models.CharField(max_length=255, blank=False, null=False, verbose_name='Nome completo')
+    cpf = models.CharField(max_length=11, blank=False, null=False, verbose_name='CPF')
+    endere = models.CharField(max_length=20, blank=False, null=True, verbose_name='Endereço completo')
+    cidade = models.CharField(max_length=20, blank=False, null=True, verbose_name='Cidade')
+    cep = models.CharField(max_length=20, blank=False, null=True, verbose_name='CEP')
+    email_Cliente = models.EmailField(blank=False, null=True, verbose_name='E-mail')
+    tel = models.CharField(max_length=12, blank=False, null=True, verbose_name='Telefone')
+    def __str__(self):
+        return self.nome

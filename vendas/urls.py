@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from .views import VendaCreateView, ProdutoCreateView, VendaListView, VendaUpdateView, BebidaCreateView, BebidaListView, BebidaUpdateView, HamburgueCreateView, HamburgueListView, HamburgueUpdateView, PizzaCreateView, PizzaListView, PizzaUpdateView, PassaporteCreateView, PassaporteUpdateView, PassaporteListView, PastelCreateView, PastelListView, PastelUpdateView
+from .views import VendaCreateView, ProdutoCreateView, VendaListView, VendaUpdateView, BebidaCreateView, BebidaListView, BebidaUpdateView, HamburgueCreateView, HamburgueListView, HamburgueUpdateView, PizzaCreateView, PizzaListView, PizzaUpdateView, PassaporteCreateView, PassaporteUpdateView, PassaporteListView, PastelCreateView, PastelListView, PastelUpdateView, ClientePegueLeveCreateView, ClientePegueLeveListView, ClientePegueLeveUpdateView, ClienteCreateView, ClienteListView, ClienteUpdateView
 
 urlpatterns = [
     path('cadastrar/venda', VendaCreateView.as_view(), name="cadastrar_venda"),
@@ -33,6 +33,15 @@ urlpatterns = [
     path('cadastrar/pastel', PastelCreateView.as_view(), name="cadastrar_pastel"),
     path('listar/pastel', PastelListView.as_view(), name="listar_pastel"),
     path('atualizar/venda/<int:pk>', PastelUpdateView.as_view(), name="atualizar_pastel"),
+
+    path('cadastrar/cliente', ClienteCreateView.as_view(), name="cadastrar_cliente"),
+    path('listar/cliente', ClienteListView.as_view(), name="listar_cliente"),
+    path('atualizar/venda/<int:pk>', ClienteUpdateView.as_view(), name="atualizar_cliente"),
+
+    path('cadastrar/pegueleve', ClientePegueLeveCreateView.as_view(), name="cadastrar_pegueleve"),
+    path('listar/pegueleve', ClientePegueLeveListView.as_view(), name="listar_pegueleve"),
+    path('atualizar/venda/<int:pk>', ClientePegueLeveUpdateView.as_view(), name="atualizar_pegueleve"),
+
 
 ]
 
