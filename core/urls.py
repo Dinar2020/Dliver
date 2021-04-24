@@ -20,4 +20,6 @@ from vendas import urls as urls_vendas
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('vendas/', include(urls_vendas)),
+    # path('django-sb-admin/', include('django_sb_admin.urls')),
+
 ]
