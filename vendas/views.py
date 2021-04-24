@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import CreateView, ListView, UpdateView
-from .models import Venda, Produto, Bebida, Hamburgue, Pizza, Passaporte
+from .models import Venda, Produto, Bebida, Hamburgue, Pizza, Passaporte, Pastel
 from django.urls import reverse_lazy
 # Create your views here.
 
@@ -161,4 +161,32 @@ class PassaporteUpdateView(UpdateView):
 
 #################  CLASSE CADASTRO PASSAPORTE   ####################
 
+#################  CLASSE CADASTRO PASTEL ####################
+
+class PastelCreateView(CreateView):
+    model = Pastel
+    template_name = 'cadastrar/pastel.html'
+
+    fields = '__all__'
+
+    def get_success_url(self):
+        return reverse_lazy("listar_pastel")
+
+
+class PastelListView(ListView):
+    model = Pastel
+    template_name = 'listar/pastel.html'
+    paginate_by = 3
+
+
+class PastelUpdateView(UpdateView):
+    model = Pastel
+    template_name = 'atualizar/pastel.html'
+
+    fields = '__all__'
+
+    def get_success_url(self):
+        return reverse_lazy('listar_pastel')
+
+#################  CLASSE CADASTRO PASTEL   ####################
 
