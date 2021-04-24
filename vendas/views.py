@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import CreateView, ListView, UpdateView
-from .models import Venda, Produto, Bebida, Hamburgue, Pizza
+from .models import Venda, Produto, Bebida, Hamburgue, Pizza, Passaporte
 from django.urls import reverse_lazy
 # Create your views here.
 
@@ -42,6 +42,7 @@ class VendaUpdateView(UpdateView):
         return reverse_lazy('listar_venda')
 
 
+#################  CLASSE CADASTRO BEBIDA:   ####################
 
 class BebidaCreateView(CreateView):
     model = Bebida
@@ -68,8 +69,10 @@ class BebidaUpdateView(UpdateView):
     def get_success_url(self):
         return reverse_lazy('listar_bebida')
 
+#################  CLASSE CADASTRO BEBIDA   ####################
 
 
+#################  CLASSE CADASTRO HAMBURGUER   ####################
 
 class HamburgueCreateView(CreateView):
     model = Hamburgue
@@ -96,8 +99,9 @@ class HamburgueUpdateView(UpdateView):
     def get_success_url(self):
         return reverse_lazy('listar_hamburgue')
 
+#################  CLASSE CADASTRO HAMBURGUER   ####################
 
-
+#################  CLASSE CADASTRO PIZZA:   ####################
 
 class PizzaCreateView(CreateView):
     model = Pizza
@@ -124,6 +128,37 @@ class PizzaUpdateView(UpdateView):
     def get_success_url(self):
         return reverse_lazy('listar_pizza')
 
+#################  CLASSE CADASTRO PIZZA   ####################
 
+#################  CLASSE CADASTRO PASSAPORTE   ####################
+
+
+class PassaporteCreateView(CreateView):
+    model = Passaporte
+    template_name = 'cadastrar/passaporte.html'
+
+    fields = '__all__'
+
+    def get_success_url(self):
+        return reverse_lazy("listar_passaporte")
+
+
+class PassaporteListView(ListView):
+    model = Passaporte
+    template_name = 'listar/passaporte.html'
+    paginate_by = 3
+
+
+class PassaporteUpdateView(UpdateView):
+    model = Passaporte
+    template_name = 'atualizar/passaporte.html'
+
+    fields = '__all__'
+
+    def get_success_url(self):
+        return reverse_lazy('listar_passaporte')
+
+
+#################  CLASSE CADASTRO PASSAPORTE   ####################
 
 
