@@ -1,6 +1,7 @@
 from django.db import models
 from django import forms
 
+print('teste')
 
 # Create your models here.
 
