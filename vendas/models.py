@@ -14,7 +14,7 @@ class Venda(models.Model):
     numero_venda = models.IntegerField(blank=False, null=False, verbose_name='Número da Venda')
     observacao = models.TextField(blank=True, null=True, verbose_name="Observação")
     comprovante_venda = models.FileField(upload_to='comprovante_venda/', verbose_name='Comprovante de Venda')
-    venda_concluida = models.BooleanField(blank=False, null=False)
+    venda_concluida = models.BooleanField(blank=False, null=False,verbose_name='Venda Concluída')
     qtd_itens = models.IntegerField(blank=True, null=False, default=0, verbose_name='Quantidade de Itens Vendidos')
     produtos_pedidos = models.ManyToManyField('SolicitacaoRetiradaEstoque', verbose_name='Produtos Pedidos')
     cliente = models.ForeignKey('Cliente', on_delete=models.DO_NOTHING, default=1, verbose_name='Cliente')
@@ -40,7 +40,7 @@ class CadastroAtendente(models.Model):
     GENERO_CHOICES = (('M', 'Masculino'), ('F', 'Feminino'), ('O', 'Outro'))
     genero = models.CharField(choices=GENERO_CHOICES, max_length=128, verbose_name='Gênero')
     possui_comorbidade = models.BooleanField(default=False)
-    observacao = models.TextField(blank=True, null=True, verbose_name="Observação Comorbidade")
+    observacao = models.TextField(blank=True, null=True, verbose_name='Observação Comorbidade')
     telefone = models.CharField(max_length=12, blank=False, null=False, verbose_name='Telefone')
     data_de_nascimento = forms.DateField()
     endereco = models.CharField(max_length=200, verbose_name='Endereço')
@@ -68,7 +68,7 @@ class CadastroLocalDeEntrega(models.Model):
     uf = models.CharField(choices=UF_CHOICES, max_length=128, verbose_name='UF')
 
     def __str__(self):
-        return self.favoritar
+        return str(self.favoritar)
 
 
 class CadastroRestaurante(models.Model):
@@ -100,8 +100,44 @@ class SolicitacaoRetiradaEstoque(models.Model):
         return str(self.pk) + '-' + str(self.bebida) or str(self.hamburgue) or str(self.pizza) or str(self.passaporte)\
                or str(self.pastel)
 
-# class Cardapio(models.Model):
+class listaPedidos(models.Model):
+    bebida = models.ForeignKey('Bebida', on_delete=models.DO_NOTHING, blank=True, null=True)
+    hamburgue = models.ForeignKey('Hamburgue', on_delete=models.DO_NOTHING, blank=True, null=True)
+    pizza = models.ForeignKey('Pizza', on_delete=models.DO_NOTHING, blank=True, null=True)
+    passaporte = models.ForeignKey('Passaporte', on_delete=models.DO_NOTHING, blank=True, null=True)
+    pastel = models.ForeignKey('Pastel', on_delete=models.DO_NOTHING, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.pk) + '-' + str(self.bebida) or str(self.hamburgue) or str(self.pizza) or str(self.passaporte) \
+               or str(self.pastel)
+
+
+
+class EntregaProduto(models.Model):
+    numero_entrega= models.IntegerField(blank=False,null=False)
+    atendente = models.ForeignKey('CadastroAtendente', on_delete=models.DO_NOTHING, default=1,
+                                  verbose_name='Atendente')
+    cliente = models.ForeignKey('Cliente', on_delete=models.DO_NOTHING, default=1, verbose_name='Cliente')
+    bebida = models.ForeignKey('Bebida', on_delete=models.DO_NOTHING, blank=True, null=True)
+    hamburgue = models.ForeignKey('Hamburgue', on_delete=models.DO_NOTHING, blank=True, null=True)
+    pizza = models.ForeignKey('Pizza', on_delete=models.DO_NOTHING, blank=True, null=True)
+    passaporte = models.ForeignKey('Passaporte', on_delete=models.DO_NOTHING, blank=True, null=True)
+    pastel = models.ForeignKey('Pastel', on_delete=models.DO_NOTHING, blank=True, null=True)
+    entrega_concluida = models.BooleanField(blank=False, null=False,verbose_name='Entrega Concluída')
+
+    def __str__(self):
+        return str(self.pk) + '-' + self.numero_entrega
+
 # GIVANILDO
+
+
+class Pedido(models.Model):
+    numero_pedido=models.IntegerField(blank=False,null=False)
+    cliente = models.ForeignKey('Cliente', on_delete=models.DO_NOTHING, default=1, verbose_name='Cliente')
+    atendente = models.ForeignKey('CadastroAtendente', on_delete=models.DO_NOTHING, default=1,
+                                  verbose_name='Atendente')
+
+
 
 
 class Cliente(models.Model):
@@ -114,7 +150,7 @@ class Cliente(models.Model):
     tel = models.CharField(max_length=12, blank=False, null=True, verbose_name='Telefone')
 
     def __str__(self):
-        return self.nome
+        return str(self.nome)
 
 
 class Bebida(models.Model):
@@ -172,4 +208,4 @@ class ClientePegueLeve(models.Model):
     tel = models.CharField(max_length=12, blank=False, null=True, verbose_name='Telefone')
 
     def __str__(self):
-        return self.nome
+        return str(self.nome)
