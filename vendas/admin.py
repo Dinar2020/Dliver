@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import Venda, Produto, Cliente, CadastroAtendente, CadastroLocalDeEntrega, CadastroRestaurante,\
-    ClientePegueLeve, Bebida, Hamburgue, Pizza, Passaporte, Pastel, SolicitacaoRetiradaEstoque
+    ClientePegueLeve, Bebida, Hamburgue, Pizza, Passaporte, Pastel, ListaProdutos, EntregaProduto
 
 # Register your models here.
 
@@ -17,4 +17,5 @@ admin.site.register(Hamburgue)
 admin.site.register(Pizza)
 admin.site.register(Passaporte)
 admin.site.register(Pastel)
-admin.site.register(SolicitacaoRetiradaEstoque)
+admin.site.register(ListaProdutos)
+admin.site.register(EntregaProduto)

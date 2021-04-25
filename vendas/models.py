@@ -3,8 +3,6 @@ from django import forms
 
 
 # Create your models here.
-print("teste ")
-
 
 class Venda(models.Model):
     nome = models.CharField(max_length=255, null=False, blank=False, verbose_name='Nome da Venda')
@@ -16,7 +14,7 @@ class Venda(models.Model):
     comprovante_venda = models.FileField(upload_to='comprovante_venda/', verbose_name='Comprovante de Venda')
     venda_concluida = models.BooleanField(blank=False, null=False)
     qtd_itens = models.IntegerField(blank=True, null=False, default=0, verbose_name='Quantidade de Itens Vendidos')
-    produtos_pedidos = models.ManyToManyField('SolicitacaoRetiradaEstoque', verbose_name='Produtos Pedidos')
+    produtos_pedidos = models.ManyToManyField('ListaProdutos', verbose_name='Produtos Pedidos')
     cliente = models.ForeignKey('Cliente', on_delete=models.DO_NOTHING, default=1, verbose_name='Cliente')
 
     def __str__(self):
@@ -47,7 +45,7 @@ class CadastroAtendente(models.Model):
     salvar_foto_perfil = models.FileField(upload_to='foto_atendente/', verbose_name='Foto de Perfil')
 
     def __str__(self):
-        return self.nome
+        return str(self.pk) + ' - ' + self.nome
 
 
 class CadastroLocalDeEntrega(models.Model):
@@ -76,8 +74,8 @@ class CadastroRestaurante(models.Model):
     endereco = models.CharField(max_length=200, verbose_name='Endereço do Restaurante')
     cnpj = models.CharField(max_length=14, blank=False, null=False, verbose_name='CNPJ')
     email_da_empresa = models.EmailField(blank=False, null=True, verbose_name='E-mail da Empresa')
-    CATEGORIA_CHOICES = (('B', 'Bebida'),('H','Hamburgue'),('Pi','Pizza') ,('Pa','Passaporte'),('Pas','Pastel'))
-    ramo= models.CharField(choices=CATEGORIA_CHOICES,max_length=128, verbose_name='Ramo da empresa',default=5)
+    CATEGORIA_CHOICES = (('B', 'Bebida'), ('H', 'Hamburgue'), ('Pi', 'Pizza') , ('Pa', 'Passaporte'), ('Pas', 'Pastel'))
+    ramo = models.CharField(choices=CATEGORIA_CHOICES, max_length=128, verbose_name='Ramo da empresa', default=5)
 
     # categoria = models.ManyToManyField('CategoriasRelacao') USAR EM REGISTRO DE PEDIDOS OU VENDAS
     # categorizar_como = (('B', 'Bebida'), ('T', 'Trabalho'))
@@ -89,7 +87,7 @@ class CadastroRestaurante(models.Model):
         return str(self.pk) + ' - ' + self.nome_restaurante
 
 
-class SolicitacaoRetiradaEstoque(models.Model):
+class ListaProdutos(models.Model):
     bebida = models.ForeignKey('Bebida', on_delete=models.DO_NOTHING, blank=True, null=True)
     hamburgue = models.ForeignKey('Hamburgue', on_delete=models.DO_NOTHING, blank=True, null=True)
     pizza = models.ForeignKey('Pizza', on_delete=models.DO_NOTHING, blank=True, null=True)
@@ -97,24 +95,35 @@ class SolicitacaoRetiradaEstoque(models.Model):
     pastel = models.ForeignKey('Pastel', on_delete=models.DO_NOTHING, blank=True, null=True)
 
     def __str__(self):
-        return str(self.pk) + '-' + str(self.bebida) or str(self.hamburgue) or str(self.pizza) or str(self.passaporte)\
-               or str(self.pastel)
+        return str(self.pk) + '-' + str(self.bebida) + str(self.hamburgue) + str(self.pizza) + str(self.passaporte) \
+               + str(self.pastel)
 
-# class Cardapio(models.Model):
+
+class EntregaProduto(models.Model):
+    antendente = models.ForeignKey('CadastroAtendente', on_delete=models.DO_NOTHING, default=1,
+                                   verbose_name='Atendente')
+    # cliente = models.ManyToManyField('Cliente')
+    # ('Cliente', on_delete=models.DO_NOTHING, default=1, verbose_name='Cliente')
+    # endereco_cliente = models.ManyToManyField('Cliente')
+    produtos_pedidos_vendas = models.ForeignKey('Venda', on_delete=models.DO_NOTHING, default=1,
+                                                verbose_name='Produtos Entregues')
+    produtos_entregues = models.BooleanField(blank=False, null=False)
+
+
 # GIVANILDO
 
 
 class Cliente(models.Model):
     nome = models.CharField(max_length=255, blank=False, null=False, verbose_name='Nome completo')
     cpf = models.CharField(max_length=11, blank=False, null=False, verbose_name='CPF')
-    endere = models.CharField(max_length=20, blank=False, null=True, verbose_name='Endereço completo')
+    endere = models.CharField(max_length=20, blank=False, null=True, verbose_name='Endereço Completo')
     cidade = models.CharField(max_length=20, blank=False, null=True, verbose_name='Cidade')
-    cep = models.CharField(max_length=20, blank=False, null=True, verbose_name='CEP')
+    cep = models.CharField(max_length=8, blank=False, null=True, verbose_name='CEP')
     email_Cliente = models.EmailField(blank=False, null=True, verbose_name='E-mail')
     tel = models.CharField(max_length=12, blank=False, null=True, verbose_name='Telefone')
 
     def __str__(self):
-        return self.nome
+        return str(self.nome) + str(self.endere)
 
 
 class Bebida(models.Model):
@@ -172,4 +181,4 @@ class ClientePegueLeve(models.Model):
     tel = models.CharField(max_length=12, blank=False, null=True, verbose_name='Telefone')
 
     def __str__(self):
-        return self.nome
+        return str(self.nome)
