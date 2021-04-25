@@ -16,7 +16,7 @@ class Venda(models.Model):
     comprovante_venda = models.FileField(upload_to='comprovante_venda/', verbose_name='Comprovante de Venda')
     venda_concluida = models.BooleanField(blank=False, null=False)
     qtd_itens = models.IntegerField(blank=True, null=False, default=0, verbose_name='Quantidade de Itens Vendidos')
-    produtos = models.ManyToManyField('Produto')
+    produtos_pedidos = models.ManyToManyField('SolicitacaoRetiradaEstoque', verbose_name='Produtos Pedidos')
     cliente = models.ForeignKey('Cliente', on_delete=models.DO_NOTHING, default=1, verbose_name='Cliente')
 
     def __str__(self):
@@ -89,18 +89,21 @@ class CadastroRestaurante(models.Model):
         return str(self.pk) + ' - ' + self.nome_restaurante
 
 
-class CategoriasRelacao(models.Model):
-    bebida = models.ForeignKey('Bebida', on_delete=models.DO_NOTHING,)
-    hamburgue = models.ForeignKey('Hamburgue', on_delete=models.DO_NOTHING,)
-    pizza = models.ForeignKey('Pizza', on_delete=models.DO_NOTHING,)
-    passaporte = models.ForeignKey('Passaporte', on_delete=models.DO_NOTHING,)
-    pastel = models.ForeignKey('Pastel', on_delete=models.DO_NOTHING,)
+class SolicitacaoRetiradaEstoque(models.Model):
+    bebida = models.ForeignKey('Bebida', on_delete=models.DO_NOTHING, blank=True, null=True)
+    hamburgue = models.ForeignKey('Hamburgue', on_delete=models.DO_NOTHING, blank=True, null=True)
+    pizza = models.ForeignKey('Pizza', on_delete=models.DO_NOTHING, blank=True, null=True)
+    passaporte = models.ForeignKey('Passaporte', on_delete=models.DO_NOTHING, blank=True, null=True)
+    pastel = models.ForeignKey('Pastel', on_delete=models.DO_NOTHING, blank=True, null=True)
 
     def __str__(self):
-        return str(self.pk) + '-' + self.bebida
+        return str(self.pk) + '-' + str(self.bebida) or str(self.hamburgue) or str(self.pizza) or str(self.passaporte)\
+               or str(self.pastel)
 
-
+# class Cardapio(models.Model):
 # GIVANILDO
+
+
 class Cliente(models.Model):
     nome = models.CharField(max_length=255, blank=False, null=False, verbose_name='Nome completo')
     cpf = models.CharField(max_length=11, blank=False, null=False, verbose_name='CPF')
@@ -120,7 +123,7 @@ class Bebida(models.Model):
     tamanho = models.CharField(max_length=10, blank=False, null=False)
 
     def __str__(self):
-        return str(self.pk) + ' - ' + self.marca
+        return str(self.pk) + ' - ' + str(self.marca) + '  R$: ' + str(self.valor) + '  ' + str(self.tamanho)
 
 
 class Hamburgue(models.Model):
@@ -129,7 +132,7 @@ class Hamburgue(models.Model):
     tamanho = models.CharField(max_length=10, blank=False, null=False)
 
     def __str__(self):
-        return str(self.pk) + ' - ' + self.sabor
+        return str(self.pk) + ' - ' + str(self.sabor) + '  R$: ' + str(self.valor) + '  ' + str(self.tamanho)
 
 
 class Pizza(models.Model):
@@ -138,7 +141,7 @@ class Pizza(models.Model):
     valor = models.DecimalField(max_digits=12, decimal_places=2, null=False, blank=False)
 
     def __str__(self):
-        return str(self.pk) + ' - ' + self.sabor
+        return str(self.pk) + ' - ' + str(self.sabor) + '  R$: ' + str(self.valor) + '  ' + str(self.tamanho)
 
 
 class Passaporte(models.Model):
@@ -147,7 +150,7 @@ class Passaporte(models.Model):
     valor = models.DecimalField(max_digits=12, decimal_places=2, null=False, blank=False)
 
     def __str__(self):
-        return str(self.pk) + ' - ' + self.sabor
+        return str(self.pk) + ' - ' + str(self.sabor) + '  R$: ' + str(self.valor) + '  ' + str(self.tamanho)
 
 
 class Pastel(models.Model):
@@ -156,7 +159,7 @@ class Pastel(models.Model):
     valor = models.DecimalField(max_digits=12, decimal_places=2, null=False, blank=False)
 
     def __str__(self):
-        return str(self.pk) + ' - ' + self.sabor
+        return str(self.pk) + ' - ' + str(self.sabor) + '  R$: ' + str(self.valor) + '  ' + str(self.tamanho)
 
 
 class ClientePegueLeve(models.Model):
