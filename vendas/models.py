@@ -5,6 +5,7 @@ from django import forms
 # Create your models here.
 
 
+
 class Venda(models.Model):
     nome = models.CharField(max_length=255, null=False, blank=False, verbose_name='Nome da Venda')
     valor = models.DecimalField(max_digits=12, decimal_places=2, null=False, blank=False,
@@ -28,15 +29,7 @@ class Produto(models.Model):
 
     def __str__(self):
         return self.nome + '. R$: ' + str(self.valor)
-
-
-class Cliente(models.Model):
-    nome = models.CharField(max_length=255, blank=False, null=False, verbose_name='Nome completo')
-    cpf = models.CharField(max_length=11, blank=False, null=False, verbose_name='CPF')
-    email_cliente = models.EmailField(blank=True, null=True, verbose_name='E-mail')
-
-    def __str__(self):
-        return self.nome
+    # apagar depois de feito a classe Categoria
 
 
 class CadastroAtendente(models.Model):
@@ -44,8 +37,8 @@ class CadastroAtendente(models.Model):
     sobrenome = models.CharField(max_length=255, null=False, blank=False, verbose_name='Sobrenome do Atendente')
     email_atendente = models.EmailField(blank=False, null=True, verbose_name='E-mail Atendente')
     cpf = models.CharField(max_length=11, blank=False, null=False, verbose_name='CPF do Atendente')
-    escolha_de_genero = (('M', 'Masculino'), ('F', 'Feminino'), ('O', 'Outro'))
-    genero = models.CharField(choices=escolha_de_genero, max_length=128, verbose_name='Gênero')
+    GENERO_CHOICES = (('M', 'Masculino'), ('F', 'Feminino'), ('O', 'Outro'))
+    genero = models.CharField(choices=GENERO_CHOICES, max_length=128, verbose_name='Gênero')
     possui_comorbidade = models.BooleanField(default=False)
     observacao = models.TextField(blank=True, null=True, verbose_name="Observação Comorbidade")
     telefone = models.CharField(max_length=12, blank=False, null=False, verbose_name='Telefone')
@@ -58,18 +51,122 @@ class CadastroAtendente(models.Model):
 
 
 class CadastroLocalDeEntrega(models.Model):
-    favoritar_como = (('C', 'Casa'), ('T', 'Trabalho'))
-    favoritar = models.CharField(choices=favoritar_como, max_length=128, verbose_name='Favoritar como')
+    FAVORITAR_CHOICES = (('C', 'Casa'), ('T', 'Trabalho'))
+    favoritar = models.CharField(choices=FAVORITAR_CHOICES, max_length=128, verbose_name='Favoritar como')
     endereco = models.CharField(max_length=200, verbose_name='Endereço')
     complemento = models.CharField(max_length=100, null=False, blank=False, verbose_name='Complemento')
     cep = models.CharField(max_length=50, null=False, blank=False, verbose_name='CEP')
     bairro = models.CharField(max_length=50, null=False, blank=False, verbose_name='Bairro')
     municipio = models.CharField(max_length=50, null=False, blank=False, verbose_name='Município')
-    todas_uf = (('Acre', 'AC'), ('Alagoas', 'AL'), ('Amapá', 'AP'), ('Amazonas', 'AM'), ('Bahia', 'BA'),
-                ('Ceará', 'CE'), ('Distrito Federa', 'DF'), ('Espírito Santo', 'ES'), ('Goiás', 'GO'),
-                ('Maranhão', 'MA'), ('Mato Grosso', 'MT'), ('Mato Grosso do Sul', 'MS'), ('Minas Gerais', 'MG'),
-                ('Pará', 'PA'), ('Paraíba', 'PB'), ('Paraná', 'PR'), ('Pernambuco', 'PE'), ('Piauí', ' PI'),
-                ('Rio de Janeiro', 'RJ'), ('Rio Grande do Norte', 'RN'), ('Rio Grande do Sul', 'RS'),
-                ('Rondônia', 'RO'), ('Roraima', 'RR'), ('Santa Catarina', 'SC'), ('São Paulo', 'SP'),
-                ('Sergipe', ' SE'), ('Tocantins', 'TO'))
-    uf = models.CharField(choices=todas_uf, max_length=128, verbose_name='UF')
+    UF_CHOICES = (('Acre', 'AC'), ('Alagoas', 'AL'), ('Amapá', 'AP'), ('Amazonas', 'AM'), ('Bahia', 'BA'),
+                  ('Ceará', 'CE'), ('Distrito Federa', 'DF'), ('Espírito Santo', 'ES'), ('Goiás', 'GO'),
+                  ('Maranhão', 'MA'), ('Mato Grosso', 'MT'), ('Mato Grosso do Sul', 'MS'), ('Minas Gerais', 'MG'),
+                  ('Pará', 'PA'), ('Paraíba', 'PB'), ('Paraná', 'PR'), ('Pernambuco', 'PE'), ('Piauí', ' PI'),
+                  ('Rio de Janeiro', 'RJ'), ('Rio Grande do Norte', 'RN'), ('Rio Grande do Sul', 'RS'),
+                  ('Rondônia', 'RO'), ('Roraima', 'RR'), ('Santa Catarina', 'SC'), ('São Paulo', 'SP'),
+                  ('Sergipe', ' SE'), ('Tocantins', 'TO'))
+    uf = models.CharField(choices=UF_CHOICES, max_length=128, verbose_name='UF')
+
+    def __str__(self):
+        return self.favoritar
+
+
+class CadastroRestaurante(models.Model):
+    nome_restaurante = models.CharField(max_length=255, null=False, blank=False, verbose_name='Nome do Restaurante')
+    endereco = models.CharField(max_length=200, verbose_name='Endereço do Restaurante')
+    cnpj = models.CharField(max_length=14, blank=False, null=False, verbose_name='CNPJ')
+    email_da_empresa = models.EmailField(blank=False, null=True, verbose_name='E-mail da Empresa')
+    CATEGORIA_CHOICES = (('B', 'Bebida'),('H','Hamburgue'),('Pi','Pizza') ,('Pa','Passaporte'),('Pas','Pastel'))
+    ramo= models.CharField(choices=CATEGORIA_CHOICES,max_length=128, verbose_name='Ramo da empresa',default=5)
+
+    # categoria = models.ManyToManyField('CategoriasRelacao') USAR EM REGISTRO DE PEDIDOS OU VENDAS
+    # categorizar_como = (('B', 'Bebida'), ('T', 'Trabalho'))
+    # lista_categorias = ['Bebida', 'Hamburgue', 'Pizza', 'Passaporte', 'Pastel']
+    # categoria_venda = models.ManyToManyField('Bebida','Hamburgue','Pizza','Passaporte','Pastel'])
+    #     return str(self.pk) + ' - ' + self.nome_restaurante
+
+    def __str__(self):
+        return str(self.pk) + ' - ' + self.nome_restaurante
+
+
+class CategoriasRelacao(models.Model):
+    bebida = models.ForeignKey('Bebida', on_delete=models.DO_NOTHING,)
+    hamburgue = models.ForeignKey('Hamburgue', on_delete=models.DO_NOTHING,)
+    pizza = models.ForeignKey('Pizza', on_delete=models.DO_NOTHING,)
+    passaporte = models.ForeignKey('Passaporte', on_delete=models.DO_NOTHING,)
+    pastel = models.ForeignKey('Pastel', on_delete=models.DO_NOTHING,)
+
+    def __str__(self):
+        return str(self.pk) + '-' + self.bebida
+
+
+# GIVANILDO
+class Cliente(models.Model):
+    nome = models.CharField(max_length=255, blank=False, null=False, verbose_name='Nome completo')
+    cpf = models.CharField(max_length=11, blank=False, null=False, verbose_name='CPF')
+    endere = models.CharField(max_length=20, blank=False, null=True, verbose_name='Endereço completo')
+    cidade = models.CharField(max_length=20, blank=False, null=True, verbose_name='Cidade')
+    cep = models.CharField(max_length=20, blank=False, null=True, verbose_name='CEP')
+    email_Cliente = models.EmailField(blank=False, null=True, verbose_name='E-mail')
+    tel = models.CharField(max_length=12, blank=False, null=True, verbose_name='Telefone')
+
+    def __str__(self):
+        return self.nome
+
+
+class Bebida(models.Model):
+    marca = models.CharField(max_length=255, blank=False, null=False)
+    valor = models.DecimalField(max_digits=12, decimal_places=2, null=False, blank=False)
+    tamanho = models.CharField(max_length=10, blank=False, null=False)
+
+    def __str__(self):
+        return str(self.pk) + ' - ' + self.marca
+
+
+class Hamburgue(models.Model):
+    sabor = models.CharField(max_length=255, blank=False, null=False)
+    valor = models.DecimalField(max_digits=12, decimal_places=2, null=False, blank=False)
+    tamanho = models.CharField(max_length=10, blank=False, null=False)
+
+    def __str__(self):
+        return str(self.pk) + ' - ' + self.sabor
+
+
+class Pizza(models.Model):
+    sabor = models.CharField(max_length=255, blank=False, null=False)
+    tamanho = models.CharField(max_length=10, blank=False, null=False)
+    valor = models.DecimalField(max_digits=12, decimal_places=2, null=False, blank=False)
+
+    def __str__(self):
+        return str(self.pk) + ' - ' + self.sabor
+
+
+class Passaporte(models.Model):
+    sabor = models.CharField(max_length=255, blank=False, null=False)
+    tamanho = models.CharField(max_length=10, blank=False, null=False)
+    valor = models.DecimalField(max_digits=12, decimal_places=2, null=False, blank=False)
+
+    def __str__(self):
+        return str(self.pk) + ' - ' + self.sabor
+
+
+class Pastel(models.Model):
+    sabor = models.CharField(max_length=255, blank=False, null=False)
+    tamanho = models.CharField(max_length=10, blank=False, null=False)
+    valor = models.DecimalField(max_digits=12, decimal_places=2, null=False, blank=False)
+
+    def __str__(self):
+        return str(self.pk) + ' - ' + self.sabor
+
+
+class ClientePegueLeve(models.Model):
+    nome = models.CharField(max_length=255, blank=False, null=False, verbose_name='Nome completo')
+    cpf = models.CharField(max_length=11, blank=False, null=False, verbose_name='CPF')
+    endere = models.CharField(max_length=20, blank=False, null=True, verbose_name='Endereço completo')
+    cidade = models.CharField(max_length=20, blank=False, null=True, verbose_name='Cidade')
+    cep = models.CharField(max_length=20, blank=False, null=True, verbose_name='CEP')
+    email_Cliente = models.EmailField(blank=False, null=True, verbose_name='E-mail')
+    tel = models.CharField(max_length=12, blank=False, null=True, verbose_name='Telefone')
+
+    def __str__(self):
+        return self.nome
