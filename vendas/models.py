@@ -3,8 +3,6 @@ from django.db import models
 # Create your models here.
 
 
-print('tes')
-
 class Venda(models.Model):
     nome = models.CharField(max_length=255, null=False, blank=False, verbose_name='Nome da Venda')
     valor = models.DecimalField(max_digits=12, decimal_places=2, null=False, blank=False,
