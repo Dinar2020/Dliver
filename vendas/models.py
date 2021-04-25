@@ -3,8 +3,7 @@ from django import forms
 
 
 # Create your models here.
-
-
+print('teste')
 
 class Venda(models.Model):
     nome = models.CharField(max_length=255, null=False, blank=False, verbose_name='Nome da Venda')
