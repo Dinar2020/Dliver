@@ -3,7 +3,7 @@ from django import forms
 
 
 # Create your models here.
-print("teste conflito")
+print("teste ")
 
 
 class Venda(models.Model):
