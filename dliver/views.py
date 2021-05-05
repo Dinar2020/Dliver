@@ -2,7 +2,9 @@ from django.shortcuts import render
 from django.views.generic import CreateView, ListView, UpdateView
 from .models import Venda
 from django.urls import reverse_lazy
+
 # Create your views here.
+
 
 class VendaCreateView(CreateView):
     model = Venda

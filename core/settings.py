@@ -29,7 +29,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 DEFAULT_APPS = [
-    'django.contrib.admin',
+
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -43,8 +43,10 @@ MY_APPS = [
 
 THIRDS_APPS = [
     'bootstrapform',
-    'adminlte3',
-    'adminlte3_theme',
+    'django_sb_admin',
+    'django.contrib.admin',
+    # 'adminlte3',
+    # 'adminlte3_theme',
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + MY_APPS + THIRDS_APPS

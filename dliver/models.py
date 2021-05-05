@@ -21,15 +21,16 @@ class Venda(models.Model):
         return str(self.pk) + ' - ' + self.nome
 
 # class CadastrarNovoProduto(models.Model):
+
+
 class FormasPagamento(models.Model):
-    nome_restaurante =models.ForeignKey('CadastroRestaurante', on_delete=models.DO_NOTHING, default=1,
-                                        verbose_name='Nome do Restaurante')
+    nome_restaurante = models.ForeignKey('CadastroRestaurante', on_delete=models.DO_NOTHING, default=1,
+                                         verbose_name='Nome do Restaurante')
     pix = models.BooleanField(blank=False, null=False)
     cartaodecredito = models.BooleanField(blank=False, null=False)
     criptomoeda = models.BooleanField(blank=False, null=False)
     aplicativo_pagamento = models.BooleanField(blank=False, null=False)
     pontos_pagamento= models.BooleanField(blank=False, null=False)
-
 
     def __str__(self):
         return str(self.pk) + ' - ' + self.nome_restaurante
@@ -80,7 +81,7 @@ class CadastroRestaurante(models.Model):
     endereco = models.CharField(max_length=200, verbose_name='Endereço do Restaurante')
     cnpj = models.CharField(max_length=14, blank=False, null=False, verbose_name='CNPJ')
     email_da_empresa = models.EmailField(blank=False, null=True, verbose_name='E-mail da Empresa')
-    CATEGORIA_CHOICES = (('B', 'Bebida'), ('H', 'Hamburgue'), ('Pi', 'Pizza') , ('Pa', 'Passaporte'), ('Pas', 'Pastel'))
+    CATEGORIA_CHOICES = (('B', 'Bebida'), ('H', 'Hamburguer'), ('Pi', 'Pizza') , ('Pa', 'Passaporte'), ('Pas', 'Pastel'))
     ramo = models.CharField(choices=CATEGORIA_CHOICES, max_length=128, verbose_name='Ramo da empresa', default=5)
 
     # categoria = models.ManyToManyField('CategoriasRelacao') USAR EM REGISTRO DE PEDIDOS OU VENDAS
@@ -95,13 +96,13 @@ class CadastroRestaurante(models.Model):
 
 class SolicitacaoProduto(models.Model):
     bebida = models.ForeignKey('Bebida', on_delete=models.DO_NOTHING, blank=True, null=True)
-    hamburgue = models.ForeignKey('Hamburgue', on_delete=models.DO_NOTHING, blank=True, null=True)
+    hamburguer = models.ForeignKey('Hamburguer', on_delete=models.DO_NOTHING, blank=True, null=True)
     pizza = models.ForeignKey('Pizza', on_delete=models.DO_NOTHING, blank=True, null=True)
     passaporte = models.ForeignKey('Passaporte', on_delete=models.DO_NOTHING, blank=True, null=True)
     pastel = models.ForeignKey('Pastel', on_delete=models.DO_NOTHING, blank=True, null=True)
 
     def __str__(self):
-        return str(self.pk) + '-' + str(self.bebida) + str(self.hamburgue) + str(self.pizza) + str(self.passaporte) \
+        return str(self.pk) + '-' + str(self.bebida) + str(self.hamburguer) + str(self.pizza) + str(self.passaporte) \
                + str(self.pastel)
 
 
@@ -141,7 +142,7 @@ class Bebida(models.Model):
         return str(self.pk) + ' - ' + str(self.marca) + '  R$: ' + str(self.valor) + '  ' + str(self.tamanho)
 
 
-class Hamburgue(models.Model):
+class Hamburguer(models.Model):
     sabor = models.CharField(max_length=255, blank=False, null=False)
     valor = models.DecimalField(max_digits=12, decimal_places=2, null=False, blank=False)
     tamanho = models.CharField(max_length=10, blank=False, null=False)
