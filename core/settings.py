@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = '58^kvu1j*2*9*_givsv)fhp#j0%2x-j632n^9prnf*m6qq%f@$'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -40,11 +38,13 @@ DEFAULT_APPS = [
 ]
 
 MY_APPS = [
-    'vendas',
+    'dliver',
 ]
 
 THIRDS_APPS = [
-    'bootstrapform','django_sb_admin'
+    'bootstrapform',
+    'adminlte3',
+    'adminlte3_theme',
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + MY_APPS + THIRDS_APPS
@@ -79,7 +79,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -89,7 +88,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -109,7 +107,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -123,7 +120,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
@@ -132,8 +128,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, "/static/")
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = 'media'
-
+# usar no sistema operacional linux
+'''
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     '/var/www/static/',
 ]
+'''

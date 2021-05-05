@@ -15,11 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from vendas import urls as urls_vendas
+from dliver import urls as urls_dliver
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('vendas/', include(urls_vendas)),
-    # path('django-sb-admin/', include('django_sb_admin.urls')),
+    path('dliver/', include(urls_dliver)),
 
 ]
