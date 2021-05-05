@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class VendasConfig(AppConfig):
+class DliverConfig(AppConfig):
     name = 'dliver'

@@ -43,10 +43,10 @@ MY_APPS = [
 
 THIRDS_APPS = [
     'bootstrapform',
-    'django_sb_admin',
+    'adminlte3',
+    'adminlte3_theme',
     'django.contrib.admin',
-    # 'adminlte3',
-    # 'adminlte3_theme',
+
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + MY_APPS + THIRDS_APPS
@@ -130,6 +130,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "/static/")
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = 'media'
+
 # usar no sistema operacional linux
 '''
 STATICFILES_DIRS = [
