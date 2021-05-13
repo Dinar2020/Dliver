@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Venda, Cliente, CadastroAtendente, CadastroLocalDeEntrega, CadastroRestaurante,\
+from .models import Venda, Cliente, CadastroAtendente, CadastroRestaurante,\
     ClientePegueLeve, Bebida, Hamburguer, Pizza, Passaporte, Pastel, SolicitacaoProduto, EntregaProduto,\
     FormasPagamento
 
@@ -9,7 +9,6 @@ from .models import Venda, Cliente, CadastroAtendente, CadastroLocalDeEntrega, C
 admin.site.register(Venda)
 admin.site.register(Cliente)
 admin.site.register(CadastroAtendente)
-admin.site.register(CadastroLocalDeEntrega)
 admin.site.register(CadastroRestaurante)
 admin.site.register(ClientePegueLeve)
 admin.site.register(Bebida)

@@ -18,9 +18,16 @@ class Venda(models.Model):
     cliente = models.ForeignKey('Cliente', on_delete=models.DO_NOTHING, default=1, verbose_name='Cliente')
 
     def __str__(self):
-        return str(self.pk) + ' - ' + self.nome
+        return str(self.pk) + ' | ' + self.nome + ' | ' + str(self.numero_venda)
 
-# class CadastrarNovoProduto(models.Model):
+
+class Produto(models.Model):
+    nome = models.CharField(max_length=255, blank=False, null=False)
+    valor = models.DecimalField(max_digits=12, decimal_places=2, null=False, blank=False)
+    tamanho = models.CharField(max_length=10, blank=False, null=False)
+
+    def __str__(self):
+        return self.nome + '| R$: ' + str(self.valor) + '|' + str(self.tamanho)
 
 
 class FormasPagamento(models.Model):
@@ -33,7 +40,7 @@ class FormasPagamento(models.Model):
     pontos_pagamento= models.BooleanField(blank=False, null=False)
 
     def __str__(self):
-        return str(self.pk) + ' - ' + self.nome_restaurante
+        return str(self.pk) + ' | ' + self.nome_restaurante
     # apagar depois de feito a classe Categoria
 
 
@@ -52,28 +59,28 @@ class CadastroAtendente(models.Model):
     salvar_foto_perfil = models.FileField(upload_to='foto_atendente/', verbose_name='Foto de Perfil')
 
     def __str__(self):
-        return str(self.pk) + ' - ' + self.nome
+        return str(self.pk) + ' | ' + self.nome
 
-
-class CadastroLocalDeEntrega(models.Model):
-    FAVORITAR_CHOICES = (('C', 'Casa'), ('T', 'Trabalho'))
-    favoritar = models.CharField(choices=FAVORITAR_CHOICES, max_length=128, verbose_name='Favoritar como')
-    endereco = models.CharField(max_length=200, verbose_name='Endereço')
-    complemento = models.CharField(max_length=100, null=False, blank=False, verbose_name='Complemento')
-    cep = models.CharField(max_length=50, null=False, blank=False, verbose_name='CEP')
-    bairro = models.CharField(max_length=50, null=False, blank=False, verbose_name='Bairro')
-    municipio = models.CharField(max_length=50, null=False, blank=False, verbose_name='Município')
-    UF_CHOICES = (('Acre', 'AC'), ('Alagoas', 'AL'), ('Amapá', 'AP'), ('Amazonas', 'AM'), ('Bahia', 'BA'),
-                  ('Ceará', 'CE'), ('Distrito Federa', 'DF'), ('Espírito Santo', 'ES'), ('Goiás', 'GO'),
-                  ('Maranhão', 'MA'), ('Mato Grosso', 'MT'), ('Mato Grosso do Sul', 'MS'), ('Minas Gerais', 'MG'),
-                  ('Pará', 'PA'), ('Paraíba', 'PB'), ('Paraná', 'PR'), ('Pernambuco', 'PE'), ('Piauí', ' PI'),
-                  ('Rio de Janeiro', 'RJ'), ('Rio Grande do Norte', 'RN'), ('Rio Grande do Sul', 'RS'),
-                  ('Rondônia', 'RO'), ('Roraima', 'RR'), ('Santa Catarina', 'SC'), ('São Paulo', 'SP'),
-                  ('Sergipe', ' SE'), ('Tocantins', 'TO'))
-    uf = models.CharField(choices=UF_CHOICES, max_length=128, verbose_name='UF')
-
-    def __str__(self):
-        return self.favoritar
+# retirar classe
+# class CadastroLocalDeEntrega(models.Model):
+#     FAVORITAR_CHOICES = (('C', 'Casa'), ('T', 'Trabalho'))
+#     favoritar = models.CharField(choices=FAVORITAR_CHOICES, max_length=128, verbose_name='Favoritar como')
+#     endereco = models.CharField(max_length=200, verbose_name='Endereço')
+#     complemento = models.CharField(max_length=100, null=False, blank=False, verbose_name='Complemento')
+#     cep = models.CharField(max_length=50, null=False, blank=False, verbose_name='CEP')
+#     bairro = models.CharField(max_length=50, null=False, blank=False, verbose_name='Bairro')
+#     municipio = models.CharField(max_length=50, null=False, blank=False, verbose_name='Município')
+#     UF_CHOICES = (('Acre', 'AC'), ('Alagoas', 'AL'), ('Amapá', 'AP'), ('Amazonas', 'AM'), ('Bahia', 'BA'),
+#                   ('Ceará', 'CE'), ('Distrito Federa', 'DF'), ('Espírito Santo', 'ES'), ('Goiás', 'GO'),
+#                   ('Maranhão', 'MA'), ('Mato Grosso', 'MT'), ('Mato Grosso do Sul', 'MS'), ('Minas Gerais', 'MG'),
+#                   ('Pará', 'PA'), ('Paraíba', 'PB'), ('Paraná', 'PR'), ('Pernambuco', 'PE'), ('Piauí', ' PI'),
+#                   ('Rio de Janeiro', 'RJ'), ('Rio Grande do Norte', 'RN'), ('Rio Grande do Sul', 'RS'),
+#                   ('Rondônia', 'RO'), ('Roraima', 'RR'), ('Santa Catarina', 'SC'), ('São Paulo', 'SP'),
+#                   ('Sergipe', ' SE'), ('Tocantins', 'TO'))
+#     uf = models.CharField(choices=UF_CHOICES, max_length=128, verbose_name='UF')
+#
+#     def __str__(self):
+#         return self.favoritar
 
 
 class CadastroRestaurante(models.Model):
@@ -91,31 +98,35 @@ class CadastroRestaurante(models.Model):
     #     return str(self.pk) + ' - ' + self.nome_restaurante
 
     def __str__(self):
-        return str(self.pk) + ' - ' + self.nome_restaurante
+        return str(self.pk) + ' | ' + self.nome_restaurante
 
 
 class SolicitacaoProduto(models.Model):
-    bebida = models.ForeignKey('Bebida', on_delete=models.DO_NOTHING, blank=True, null=True)
+    bebida = models.ForeignKey('Bebida', on_delete=models.DO_NOTHING, blank=True, null=True, )
     hamburguer = models.ForeignKey('Hamburguer', on_delete=models.DO_NOTHING, blank=True, null=True)
     pizza = models.ForeignKey('Pizza', on_delete=models.DO_NOTHING, blank=True, null=True)
     passaporte = models.ForeignKey('Passaporte', on_delete=models.DO_NOTHING, blank=True, null=True)
     pastel = models.ForeignKey('Pastel', on_delete=models.DO_NOTHING, blank=True, null=True)
 
     def __str__(self):
-        return str(self.pk) + '-' + str(self.bebida) + str(self.hamburguer) + str(self.pizza) + str(self.passaporte) \
+        return str(self.pk) + '|' + str(self.bebida) + str(self.hamburguer) + str(self.pizza) + str(self.passaporte) \
                + str(self.pastel)
 
 
 class EntregaProduto(models.Model):
-    antendente = models.ForeignKey('CadastroAtendente', on_delete=models.DO_NOTHING, default=1,
-                                   verbose_name='Atendente')
-    cliente = models.ForeignKey('Cliente', on_delete=models.DO_NOTHING,default=1)
+    numero_entrega = models.IntegerField(blank=False, null=False, verbose_name='Número da entrega', default=False)
+    nome_antendente = models.ForeignKey('CadastroAtendente', on_delete=models.DO_NOTHING, default=1,
+                                        verbose_name='Atendente')
+    nome_cliente = models.ForeignKey('Cliente', on_delete=models.DO_NOTHING,default=1)
     # ('Cliente', on_delete=models.DO_NOTHING, default=1, verbose_name='Cliente')
     # endereco_cliente = models.ManyToOneField('Cliente', on_delete=models.DO_NOTHING, from_fields='endere',to_fields=)
     produtos_pedidos_vendas = models.ForeignKey('Venda', on_delete=models.DO_NOTHING, default=1,
                                                 verbose_name='Confirmação de Entrega')
-    produtos_entregues = models.BooleanField(blank=False, null=False)
+    produtos_entregues = models.BooleanField(blank=False, null=False,default=False)
+    pagamento_na_entrega=models.BooleanField(blank=False, null=False, default=False)
 
+    def __str__(self):
+        return str(self.pk) + '-' + self.numero_entrega
 
 # GIVANILDO
 
@@ -139,7 +150,7 @@ class Bebida(models.Model):
     tamanho = models.CharField(max_length=10, blank=False, null=False)
 
     def __str__(self):
-        return str(self.pk) + ' - ' + str(self.marca) + '  R$: ' + str(self.valor) + '  ' + str(self.tamanho)
+        return str(self.pk) + ' | ' + str(self.marca) + ' | R$: ' + str(self.valor) + ' | ' + str(self.tamanho)
 
 
 class Hamburguer(models.Model):
@@ -148,7 +159,7 @@ class Hamburguer(models.Model):
     tamanho = models.CharField(max_length=10, blank=False, null=False)
 
     def __str__(self):
-        return str(self.pk) + ' - ' + str(self.sabor) + '  R$: ' + str(self.valor) + '  ' + str(self.tamanho)
+        return str(self.pk) + ' | ' + str(self.sabor) + ' | R$: ' + str(self.valor) + ' | ' + str(self.tamanho)
 
 
 class Pizza(models.Model):
@@ -157,7 +168,7 @@ class Pizza(models.Model):
     valor = models.DecimalField(max_digits=12, decimal_places=2, null=False, blank=False)
 
     def __str__(self):
-        return str(self.pk) + ' - ' + str(self.sabor) + '  R$: ' + str(self.valor) + '  ' + str(self.tamanho)
+        return str(self.pk) + ' | ' + str(self.sabor) + ' | R$: ' + str(self.valor) + ' | ' + str(self.tamanho)
 
 
 class Passaporte(models.Model):
@@ -166,7 +177,7 @@ class Passaporte(models.Model):
     valor = models.DecimalField(max_digits=12, decimal_places=2, null=False, blank=False)
 
     def __str__(self):
-        return str(self.pk) + ' - ' + str(self.sabor) + '  R$: ' + str(self.valor) + '  ' + str(self.tamanho)
+        return str(self.pk) + ' | ' + str(self.sabor) + ' | R$: ' + str(self.valor) + ' | ' + str(self.tamanho)
 
 
 class Pastel(models.Model):
@@ -175,7 +186,7 @@ class Pastel(models.Model):
     valor = models.DecimalField(max_digits=12, decimal_places=2, null=False, blank=False)
 
     def __str__(self):
-        return str(self.pk) + ' - ' + str(self.sabor) + '  R$: ' + str(self.valor) + '  ' + str(self.tamanho)
+        return str(self.pk) + ' | ' + str(self.sabor) + ' | R$: ' + str(self.valor) + ' | ' + str(self.tamanho)
 
 
 class ClientePegueLeve(models.Model):

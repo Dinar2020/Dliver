@@ -31,7 +31,7 @@ class VendaCreateView(CreateView):
 class VendaListView(ListView):
     model = Venda
     template_name = 'listar/venda.html'
-    paginate_by = 3
+    paginate_by = 5
 
 
 class VendaUpdateView(UpdateView):
