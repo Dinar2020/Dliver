@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.urls import path
 from .views import VendaCreateView, VendaListView, VendaUpdateView, ProdutoCreateView,\
     ProdutoUpdateView, ProdutoListView, EntregaProdutoCreateView, EntregaProdutoListView, EntregaProdutoUpdateView,\
-    ClienteCreateView, ClienteListView, ClienteUpdateView
+    ClienteCreateView, ClienteListView, ClienteUpdateView, ClientePegueLeveCreateView, ClientePegueLeveListView,\
+    ClientePegueLeveUpdateView
 
 urlpatterns = [
     path('cadastrar/venda', VendaCreateView.as_view(), name="cadastrar_venda"),
@@ -20,6 +21,10 @@ urlpatterns = [
     path('cadastrar/cliente', ClienteCreateView.as_view(), name="cadastrar_cliente"),
     path('listar/cliente', ClienteListView.as_view(), name="listar_entrega_cliente"),
     path('atualizar/cliente/<int:pk>', ClienteUpdateView.as_view(), name="atualizar_cliente"),
+
+    path('cadastrar/clientepegueleve', ClientePegueLeveCreateView.as_view(), name="cadastrar_clientepegueleve"),
+    path('listar/clientepegueleve', ClientePegueLeveListView.as_view(), name="listar_entrega_clientepegueleve"),
+    path('atualizar/clientepegueleve/<int:pk>', ClientePegueLeveUpdateView.as_view(), name="atualizar_clientepegueleve"),
 
 
 

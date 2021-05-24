@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import CreateView, ListView, UpdateView
-from .models import Venda, Produto, EntregaProduto
+from .models import Venda, Produto, EntregaProduto, Cliente, ClientePegueLeve
 from django.urls import reverse_lazy
 
 # Create your views here.
@@ -94,7 +94,7 @@ class EntregaProdutoUpdateView(UpdateView):
 ####################### CLIENTE ###################################
 
 class ClienteCreateView(CreateView):
-    model =  Cliente
+    model = Cliente
     template_name = 'cadastrar/entrega_cliente.html'
     fields = '__all__'
 
@@ -103,13 +103,13 @@ class ClienteCreateView(CreateView):
 
 
 class ClienteListView(ListView):
-    model =  Cliente
+    model = Cliente
     template_name = 'listar/cliente.html'
     paginate_by = 5
 
 
 class  ClienteUpdateView(UpdateView):
-    model =  Cliente
+    model = Cliente
     template_name = 'atualizar/cliente.html'
 
     fields = '__all__'
@@ -117,4 +117,32 @@ class  ClienteUpdateView(UpdateView):
     def get_success_url(self):
         return reverse_lazy('listar_cliente')
 
-####################### Entrega PRODUTO ###################################
+####################### CLIENTE ###################################
+
+####################### CLIENTE PEGUE-LEVE  ###################################
+
+class ClientePegueLeveCreateView(CreateView):
+    model = ClientePegueLeve
+    template_name = 'cadastrar/clientepegueleve.html'
+    fields = '__all__'
+
+    def get_success_url(self):
+        return reverse_lazy('cadastrar_clientepegueleve')
+
+
+class ClientePegueLeveListView(ListView):
+    model = ClientePegueLeve
+    template_name = 'listar/clientepegueleve.html'
+    paginate_by = 5
+
+
+class ClientePegueLeveUpdateView(UpdateView):
+    model = ClientePegueLeve
+    template_name = 'atualizar/clientepegueleve.html'
+
+    fields = '__all__'
+
+    def get_success_url(self):
+        return reverse_lazy('listar_clientepegueleve')
+
+####################### CLIENTE PEGUE-LEVE ###################################
