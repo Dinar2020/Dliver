@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import CreateView, ListView, UpdateView
-from .models import Venda, Produto
+from .models import Venda, Produto, EntregaProduto
 from django.urls import reverse_lazy
 
 # Create your views here.
@@ -40,9 +40,7 @@ class VendaUpdateView(UpdateView):
 class ProdutoCreateView(CreateView):
     model = Produto
     template_name = 'cadastrar/produto.html'
-    # Caso eu queira que sejam cadastrados todos os fields do meu Model você colocará o fields = '__all__'
-    # Caso queira especificar, colocar da forma abaixo. Por exemplo, se quiser apenas nome colocar fields = ['nome']
-    fields = ['nome', 'valor']
+    fields = '__all__'
 
     def get_success_url(self):
         return reverse_lazy('cadastrar_produto')
@@ -64,3 +62,31 @@ class ProdutoUpdateView(UpdateView):
         return reverse_lazy('listar_produto')
 
 ####################### PRODUTO ###################################
+
+####################### Entrega PRODUTO ###################################
+
+class EntregaProdutoCreateView(CreateView):
+    model = EntregaProduto
+    template_name = 'cadastrar/entrega_produto.html'
+    fields = '__all__'
+
+    def get_success_url(self):
+        return reverse_lazy('cadastrar_entrega_produto')
+
+
+class EntregaProdutoListView(ListView):
+    model = EntregaProduto
+    template_name = 'listar/entrega_produto.html'
+    paginate_by = 5
+
+
+class EntregaProdutoUpdateView(UpdateView):
+    model = EntregaProduto
+    template_name = 'atualizar/entrega_produto.html'
+
+    fields = '__all__'
+
+    def get_success_url(self):
+        return reverse_lazy('listar_entrega_produto')
+
+####################### Entrega PRODUTO ###################################

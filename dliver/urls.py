@@ -9,7 +9,15 @@ urlpatterns = [
 
     path('cadastrar/produto', ProdutoCreateView.as_view(), name="cadastrar_produto"),
     path('listar/produto', ProdutoListView.as_view(), name="listar_produto"),
-    path('atualizar/produto', ProdutoUpdateView.as_view(), name="atualizar_produto"),
+    path('atualizar/produto/<int:pk>', ProdutoUpdateView.as_view(), name="atualizar_produto"),
+
+    path('cadastrar/entregaproduto', ProdutoCreateView.as_view(), name="cadastrar_entrega_produto"),
+    path('listar/entregaproduto', ProdutoListView.as_view(), name="listar_entrega_produto"),
+    path('atualizar/entregaproduto/<int:pk>', ProdutoUpdateView.as_view(), name="atualizar_entrega_produto"),
+
+
+
+
 
 ]
 
