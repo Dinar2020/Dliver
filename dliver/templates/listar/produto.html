@@ -1,0 +1,53 @@
+{% extends 'adminlte/base.html' %}
+{% block content %}
+    <h1>Página de listagem de Produtos</h1>
+    <a href="{% url 'cadastrar_produto' %}">CADASTRAR PRODUTO</a>
+
+    <table>
+        <thead>
+            <th>ID</th>
+            <th>NOME</th>
+            <th>TAMANHO</th>
+            <th>FORNECEDOR</th>
+            <th>QUANTIDADE</th>
+            <th>NACIONALIDADE</th>
+        </thead>
+        <tbody>
+    {% for obj_produto in object_list %}
+            <tr>
+                <td>{{obj_produto.pk}}</td>
+                <td>{{obj_produto.nome}}</td>
+                <td>{{obj_produto.valor}}</td>
+                <td>{{obj_produto.tamanho}}</td>
+                <td>{{obj_produto.fornecedor}}</td>
+                <td>{{obj_produto.quantidade}}</td>
+                <td>{{obj_produto.nacionalidade_do_produto}}</td>
+                <td><a href="{% url 'atualizar_produto' obj_produto.pk %}">ATUALIZAR</a></td>
+            </tr>
+    {% empty %}
+        <h3>Desculpe, você ainda nao possui produtos cadastrados em seu sistema.
+            <br/>:'(</h3>
+    {% endfor %}
+        </tbody>
+    </table>
+
+    {% if is_paginated %}
+        <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1">&laquo; Primeira Página |</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">Página Anterior </a>
+                {% endif %}
+
+                <span class="current">
+                    | Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}. |
+                </span>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">Próxima Página</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">| Última Página &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    {% endif %}
+{% endblock %}
