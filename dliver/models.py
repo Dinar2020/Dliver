@@ -25,6 +25,11 @@ class Produto(models.Model):
     nome = models.CharField(max_length=255, blank=False, null=False)
     valor = models.DecimalField(max_digits=12, decimal_places=2, null=False, blank=False)
     tamanho = models.CharField(max_length=10, blank=False, null=False)
+    fornecedor = models.CharField(max_length=10, blank=False, null=False)
+    quantidade = models.CharField(max_length=10, blank=False, null=False)
+    nacionalidade_do_produto = models.CharField(max_length=10, blank=False, null=False)
+    observacao = models.CharField(max_length=10, blank=False, null=False)
+
 
     def __str__(self):
         return self.nome + '| R$: ' + str(self.valor) + '|' + str(self.tamanho)
@@ -61,26 +66,6 @@ class CadastroAtendente(models.Model):
     def __str__(self):
         return str(self.pk) + ' | ' + self.nome
 
-# retirar classe
-# class CadastroLocalDeEntrega(models.Model):
-#     FAVORITAR_CHOICES = (('C', 'Casa'), ('T', 'Trabalho'))
-#     favoritar = models.CharField(choices=FAVORITAR_CHOICES, max_length=128, verbose_name='Favoritar como')
-#     endereco = models.CharField(max_length=200, verbose_name='Endereço')
-#     complemento = models.CharField(max_length=100, null=False, blank=False, verbose_name='Complemento')
-#     cep = models.CharField(max_length=50, null=False, blank=False, verbose_name='CEP')
-#     bairro = models.CharField(max_length=50, null=False, blank=False, verbose_name='Bairro')
-#     municipio = models.CharField(max_length=50, null=False, blank=False, verbose_name='Município')
-#     UF_CHOICES = (('Acre', 'AC'), ('Alagoas', 'AL'), ('Amapá', 'AP'), ('Amazonas', 'AM'), ('Bahia', 'BA'),
-#                   ('Ceará', 'CE'), ('Distrito Federa', 'DF'), ('Espírito Santo', 'ES'), ('Goiás', 'GO'),
-#                   ('Maranhão', 'MA'), ('Mato Grosso', 'MT'), ('Mato Grosso do Sul', 'MS'), ('Minas Gerais', 'MG'),
-#                   ('Pará', 'PA'), ('Paraíba', 'PB'), ('Paraná', 'PR'), ('Pernambuco', 'PE'), ('Piauí', ' PI'),
-#                   ('Rio de Janeiro', 'RJ'), ('Rio Grande do Norte', 'RN'), ('Rio Grande do Sul', 'RS'),
-#                   ('Rondônia', 'RO'), ('Roraima', 'RR'), ('Santa Catarina', 'SC'), ('São Paulo', 'SP'),
-#                   ('Sergipe', ' SE'), ('Tocantins', 'TO'))
-#     uf = models.CharField(choices=UF_CHOICES, max_length=128, verbose_name='UF')
-#
-#     def __str__(self):
-#         return self.favoritar
 
 
 class CadastroRestaurante(models.Model):
@@ -91,11 +76,6 @@ class CadastroRestaurante(models.Model):
     CATEGORIA_CHOICES = (('B', 'Bebida'), ('H', 'Hamburguer'), ('Pi', 'Pizza') , ('Pa', 'Passaporte'), ('Pas', 'Pastel'))
     ramo = models.CharField(choices=CATEGORIA_CHOICES, max_length=128, verbose_name='Ramo da empresa', default=5)
 
-    # categoria = models.ManyToManyField('CategoriasRelacao') USAR EM REGISTRO DE PEDIDOS OU VENDAS
-    # categorizar_como = (('B', 'Bebida'), ('T', 'Trabalho'))
-    # lista_categorias = ['Bebida', 'Hamburgue', 'Pizza', 'Passaporte', 'Pastel']
-    # categoria_venda = models.ManyToManyField('Bebida','Hamburgue','Pizza','Passaporte','Pastel'])
-    #     return str(self.pk) + ' - ' + self.nome_restaurante
 
     def __str__(self):
         return str(self.pk) + ' | ' + self.nome_restaurante
@@ -115,15 +95,13 @@ class SolicitacaoProduto(models.Model):
 
 class EntregaProduto(models.Model):
     numero_entrega = models.IntegerField(blank=False, null=False, verbose_name='Número da entrega', default=False)
-    nome_antendente = models.ForeignKey('CadastroAtendente', on_delete=models.DO_NOTHING, default=1,
-                                        verbose_name='Atendente')
+    nome_antendente = models.ForeignKey('CadastroAtendente', on_delete=models.DO_NOTHING, default=1,verbose_name='Atendente')
     nome_cliente = models.ForeignKey('Cliente', on_delete=models.DO_NOTHING,default=1)
-    # ('Cliente', on_delete=models.DO_NOTHING, default=1, verbose_name='Cliente')
-    # endereco_cliente = models.ManyToOneField('Cliente', on_delete=models.DO_NOTHING, from_fields='endere',to_fields=)
-    produtos_pedidos_vendas = models.ForeignKey('Venda', on_delete=models.DO_NOTHING, default=1,
-                                                verbose_name='Confirmação de Entrega')
+    produtos_pedidos_vendas = models.ForeignKey('Venda', on_delete=models.DO_NOTHING, default=1,verbose_name='Confirmação de Entrega')
     produtos_entregues = models.BooleanField(blank=False, null=False,default=False)
-    pagamento_na_entrega=models.BooleanField(blank=False, null=False, default=False)
+    pagamento_na_entrega = models.BooleanField(blank=False, null=False, default=False)
+    entrega_concluida = models.BooleanField(blank=False, null=False)
+    observacao = models.TextField(blank=True, null=True, verbose_name="Observação")
 
     def __str__(self):
         return str(self.pk) + '-' + self.numero_entrega
@@ -135,10 +113,12 @@ class Cliente(models.Model):
     nome = models.CharField(max_length=255, blank=False, null=False, verbose_name='Nome completo')
     cpf = models.CharField(max_length=11, blank=False, null=False, verbose_name='CPF')
     endere = models.CharField(max_length=128, blank=False, null=True, verbose_name='Endereço Completo')
+    data_de_nascimento = forms.DateField()
     cidade = models.CharField(max_length=50, blank=False, null=True, verbose_name='Cidade')
     cep = models.CharField(max_length=8, blank=False, null=True, verbose_name='CEP')
     email_Cliente = models.EmailField(blank=False, null=True, verbose_name='E-mail')
     tel = models.CharField(max_length=12, blank=False, null=True, verbose_name='Telefone')
+    observacao = models.TextField(blank=True, null=True, verbose_name="Observação")
 
     def __str__(self):
         return str(self.pk) + '- ' + str(self.nome)
@@ -191,12 +171,28 @@ class Pastel(models.Model):
 
 class ClientePegueLeve(models.Model):
     nome = models.CharField(max_length=255, blank=False, null=False, verbose_name='Nome completo')
+    data_de_nascimento = forms.DateField()
     cpf = models.CharField(max_length=11, blank=False, null=False, verbose_name='CPF')
     endere = models.CharField(max_length=20, blank=False, null=True, verbose_name='Endereço completo')
     cidade = models.CharField(max_length=20, blank=False, null=True, verbose_name='Cidade')
     cep = models.CharField(max_length=20, blank=False, null=True, verbose_name='CEP')
     email_Cliente = models.EmailField(blank=False, null=True, verbose_name='E-mail')
     tel = models.CharField(max_length=12, blank=False, null=True, verbose_name='Telefone')
+    observacao = models.TextField(blank=True, null=True, verbose_name="Observação")
 
     def __str__(self):
         return str(self.nome)
+
+class Fornecedor(models.Model):
+    nome_empresa = models.CharField(max_length=255, blank=False, null=False, verbose_name='Nome completo')
+    endere =  models.CharField(max_length=20, blank=False, null=True, verbose_name='Endereço completo')
+    cep = models.CharField(max_length=20, blank=False, null=False, verbose_name='CEP')
+    cnpj = models.CharField(max_length=20, blank=False, null=False, verbose_name='CNPJ')
+    ramo_atuacao = models.CharField(max_length=255, blank=False, null=False, verbose_name='Ramo de Atuação')
+    email_empresa = models.EmailField(blank=False, null=True, verbose_name='E-mail')
+    categoria_CHOICE = (('B', 'Bebida'), ('H', 'Hamburguer'), ('Pi', 'Pizza') , ('Pa', 'Passaporte'), ('Pas', 'Pastel'))
+    telefone = models.CharField(max_length=12, blank=False, null=True, verbose_name='Telefone')
+    Observacao = models.TextField(blank=True, null=True, verbose_name='Observação')
+
+    def __str__(self):
+        return str(self.nome_empresa)
