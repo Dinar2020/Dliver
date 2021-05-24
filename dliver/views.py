@@ -63,7 +63,7 @@ class ProdutoUpdateView(UpdateView):
 
 ####################### PRODUTO ###################################
 
-####################### Entrega PRODUTO ###################################
+####################### ENTREGA PRODUTO ###################################
 
 class EntregaProdutoCreateView(CreateView):
     model = EntregaProduto
@@ -88,5 +88,33 @@ class EntregaProdutoUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('listar_entrega_produto')
+
+####################### ENTREGA PRODUTO ###################################
+
+####################### CLIENTE ###################################
+
+class ClienteCreateView(CreateView):
+    model =  Cliente
+    template_name = 'cadastrar/entrega_cliente.html'
+    fields = '__all__'
+
+    def get_success_url(self):
+        return reverse_lazy('cadastrar_cliente')
+
+
+class ClienteListView(ListView):
+    model =  Cliente
+    template_name = 'listar/cliente.html'
+    paginate_by = 5
+
+
+class  ClienteUpdateView(UpdateView):
+    model =  Cliente
+    template_name = 'atualizar/cliente.html'
+
+    fields = '__all__'
+
+    def get_success_url(self):
+        return reverse_lazy('listar_cliente')
 
 ####################### Entrega PRODUTO ###################################

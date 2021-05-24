@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.urls import path
-from .views import VendaCreateView, VendaListView, VendaUpdateView, ProdutoCreateView, ProdutoUpdateView, ProdutoListView
+from .views import VendaCreateView, VendaListView, VendaUpdateView, ProdutoCreateView,\
+    ProdutoUpdateView, ProdutoListView, EntregaProdutoCreateView, EntregaProdutoListView, EntregaProdutoUpdateView,\
+    ClienteCreateView, ClienteListView, ClienteUpdateView
 
 urlpatterns = [
     path('cadastrar/venda', VendaCreateView.as_view(), name="cadastrar_venda"),
@@ -11,11 +13,13 @@ urlpatterns = [
     path('listar/produto', ProdutoListView.as_view(), name="listar_produto"),
     path('atualizar/produto/<int:pk>', ProdutoUpdateView.as_view(), name="atualizar_produto"),
 
-    path('cadastrar/entregaproduto', ProdutoCreateView.as_view(), name="cadastrar_entrega_produto"),
-    path('listar/entregaproduto', ProdutoListView.as_view(), name="listar_entrega_produto"),
-    path('atualizar/entregaproduto/<int:pk>', ProdutoUpdateView.as_view(), name="atualizar_entrega_produto"),
+    path('cadastrar/entregaproduto', EntregaProdutoCreateView.as_view(), name="cadastrar_entrega_produto"),
+    path('listar/entregaproduto', EntregaProdutoListView.as_view(), name="listar_entrega_produto"),
+    path('atualizar/entregaproduto/<int:pk>', EntregaProdutoUpdateView.as_view(), name="atualizar_entrega_produto"),
 
-
+    path('cadastrar/cliente', ClienteCreateView.as_view(), name="cadastrar_cliente"),
+    path('listar/cliente', ClienteListView.as_view(), name="listar_entrega_cliente"),
+    path('atualizar/cliente/<int:pk>', ClienteUpdateView.as_view(), name="atualizar_cliente"),
 
 
 
