@@ -26,7 +26,9 @@ urlpatterns = [
     path('listar/clientepegueleve', ClientePegueLeveListView.as_view(), name="listar_entrega_clientepegueleve"),
     path('atualizar/clientepegueleve/<int:pk>', ClientePegueLeveUpdateView.as_view(), name="atualizar_clientepegueleve"),
 
-
+    path('cadastrar/fornecedor', ClientePegueLeveCreateView.as_view(), name="cadastrar_fornecedor"),
+    path('listar/fornecedor', ClientePegueLeveListView.as_view(), name="listar_fornecedor"),
+    path('atualizar/fornecedor/<int:pk>', ClientePegueLeveUpdateView.as_view(),name="atualizar_fornecedor"),
 
 ]
 

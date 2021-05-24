@@ -1,34 +1,34 @@
 {% extends 'adminlte/base.html' %}
 {% block content %}
     <h1>LISTAGEM DOS CLIENTE</h1>
-    <a href="{% url 'cadastrar_clientepeqgueleve' %}">CADASTRAR CLIENTE PEGUELEVE</a>
+    <a href="{% url 'cadastrar_fornecedor' %}">CADASTRAR FORNECEDOR</a>
 
     <table>
         <thead>
             <th>ID</th>
-            <th>NOME</th>
-            <th>CPF</th>
+            <th>NOME DA EMPRESA</th>
             <th>ENDEREÇO</th>
-            <th>DATA DE NASCIMENTO</th>
-            <th>CIDADE</th>
             <th>CEP</th>
-            <th>EMAIL</th>
+            <th>CNPJ</th>
+            <th>RAMO DE ATUAÇÃO</th>
+            <th>EMAIL DA EMPRESA</th>
+            <th>CATEGORIA</th>
             <th>TELEFONE</th>
         </thead>
         <tbody>
-    {% for obj_clientepegueleve in object_clientepegueleve %}
+    {% for obj_fornecedor in object_fornecedor %}
             <tr>
                 <td>{{obj_produto.pk}}</td>
-                <td>{{obj_produto.nome}}</td>
-                <td>{{obj_produto.cpf}}</td>
+                <td>{{obj_produto.nome_empresa}}</td>
                 <td>{{obj_produto.endere}}</td>
-                <td>{{obj_produto.data_de_nascimento}}</td>
-                <td>{{obj_produto.cidade}}</td>
                 <td>{{obj_produto.cep}}</td>
-                <td>{{obj_produto.email_Cliente}}</td>
-                <td>{{obj_produto.tel}}</td>
+                <td>{{obj_produto.cnpj}}</td>
+                <td>{{obj_produto.ramo_atuacao}}</td>
+                <td>{{obj_produto.email_empresa}}</td>
+                <td>{{obj_produto.categoria_CHOICE}}</td>
+                <td>{{obj_produto.telefone}}</td>
 
-                <td><a href="{% url 'atualizar_clientepegueleve' obj_clientepegueleve.pk %}">ATUALIZAR</a></td>
+                <td><a href="{% url 'atualizar_fornecedor' obj_fornecedor.pk %}">ATUALIZAR</a></td>
             </tr>
     {% empty %}
         <h3>Desculpe, você ainda nao possui clientes cadastrados em seu sistema.

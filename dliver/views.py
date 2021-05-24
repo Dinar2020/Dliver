@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import CreateView, ListView, UpdateView
-from .models import Venda, Produto, EntregaProduto, Cliente, ClientePegueLeve
+from .models import Venda, Produto, EntregaProduto, Cliente, ClientePegueLeve, Fornecedor
 from django.urls import reverse_lazy
 
 # Create your views here.
@@ -146,3 +146,31 @@ class ClientePegueLeveUpdateView(UpdateView):
         return reverse_lazy('listar_clientepegueleve')
 
 ####################### CLIENTE PEGUE-LEVE ###################################
+
+####################### FORNECEDOR  ###################################
+
+class FornecedorCreateView(CreateView):
+    model = Fornecedor
+    template_name = 'cadastrar/fornecedor.html'
+    fields = '__all__'
+
+    def get_success_url(self):
+        return reverse_lazy('cadastrar_fornecedor')
+
+
+class FornecedorListView(ListView):
+    model = Fornecedor
+    template_name = 'listar/fornecedor.html'
+    paginate_by = 5
+
+
+class FornecedorUpdateView(UpdateView):
+    model = Fornecedor
+    template_name = 'atualizar/fornecedor.html'
+
+    fields = '__all__'
+
+    def get_success_url(self):
+        return reverse_lazy('listar_fornecedor')
+
+####################### FORNECEDOR ###################################
