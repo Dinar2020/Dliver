@@ -1,0 +1,58 @@
+{% extends 'adminlte/base.html' %}
+{% block content %}
+    <h1>Página de listagem de Produtos</h1>
+    <a href="{% url 'cadastrar_produto' %}">CADASTRAR PRODUTO</a>
+
+    <table>
+        <thead>
+            <th>ID</th>
+            <th>NUMERO DA ENTREGA</th>
+            <th>NOME ATENDENTE</th>
+            <th>NOME CLIENTE</th>
+            <th>PRODUTOS PEDIDOS</th>
+            <th>PRODUTOS ENTREGUES</th>
+            <th>PAGAMENTO NA ENTREGA</th>
+            <th>ENTREGA CONCLUIDA</th>
+        </thead>
+        <tbody>
+    {% for obj_entrega_produto in object_list %}
+            <tr>
+                <td>{{obj_produto.pk}}</td>
+                <td>{{obj_produto.numero_entrega}}</td>
+                <td>{{obj_produto.nome_antendente}}</td>
+                <td>{{obj_produto.nome_cliente}}</td>
+                <td>{{obj_produto.produtos_pedidos_vendas}}</td>
+                <td>{{obj_produto.produtos_entregues}}</td>
+                <td>{{obj_produto.pagamento_na_entrega}}</td>
+                <td>{{obj_produto.entrega_concluida}}</td>
+                <td>{{obj_produto.pagamento_na_entrega}}</td>
+
+                <td><a href="{% url 'atualizar_entrega_produto' obj_entrega_produto.pk %}">ATUALIZAR</a></td>
+            </tr>
+    {% empty %}
+        <h3>Desculpe, você ainda nao possui entregas de produtos cadastrados em seu sistema.
+            <br/>:'(</h3>
+    {% endfor %}
+        </tbody>
+    </table>
+
+    {% if is_paginated %}
+        <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1">&laquo; Primeira Página |</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">Página Anterior </a>
+                {% endif %}
+
+                <span class="current">
+                    | Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}. |
+                </span>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">Próxima Página</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">| Última Página &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    {% endif %}
+{% endblock %}

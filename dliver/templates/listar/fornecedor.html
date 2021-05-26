@@ -1,29 +1,37 @@
 {% extends 'adminlte/base.html' %}
 {% block content %}
-    <h1>Página de listagem de venda</h1>
-    <a href="{% url 'cadastrar_venda' %}">CADASTRAR VENDA</a>
+    <h1>LISTAGEM DOS FORNECEDORES</h1>
+    <a href="{% url 'cadastrar_fornecedor' %}">CADASTRAR FORNECEDOR</a>
 
     <table>
         <thead>
             <th>ID</th>
-            <th>NOME</th>
-            <th>VALOR</th>
-            <th>DATA DA VENDA</th>
-            <th>CLIENTE</th>
-            <th>AÇÕES</th>
+            <th>NOME DA EMPRESA</th>
+            <th>ENDEREÇO</th>
+            <th>CEP</th>
+            <th>CNPJ</th>
+            <th>RAMO DE ATUAÇÃO</th>
+            <th>EMAIL DA EMPRESA</th>
+            <th>CATEGORIA</th>
+            <th>TELEFONE</th>
         </thead>
         <tbody>
-    {% for obj_venda in object_list %}
+    {% for obj_fornecedor in object_fornecedor %}
             <tr>
-                <td>{{obj_venda.pk}}</td>
-                <td>{{obj_venda.nome}}</td>
-                <td>{{obj_venda.valor}}</td>
-                <td>{{obj_venda.data_venda}}</td>
-                <td>{{obj_venda.cliente}}</td>
-                <td><a href="{% url 'atualizar_venda' obj_venda.pk %}">ATUALIZAR</a></td>
+                <td>{{obj_produto.pk}}</td>
+                <td>{{obj_produto.nome_empresa}}</td>
+                <td>{{obj_produto.endere}}</td>
+                <td>{{obj_produto.cep}}</td>
+                <td>{{obj_produto.cnpj}}</td>
+                <td>{{obj_produto.ramo_atuacao}}</td>
+                <td>{{obj_produto.email_empresa}}</td>
+                <td>{{obj_produto.categoria_CHOICE}}</td>
+                <td>{{obj_produto.telefone}}</td>
+
+                <td><a href="{% url 'atualizar_fornecedor' obj_fornecedor.pk %}">ATUALIZAR</a></td>
             </tr>
     {% empty %}
-        <h3>Desculpe, você ainda nao possui vendas cadastradas em seu sistema.
+        <h3>Desculpe, você ainda nao possui clientes cadastrados em seu sistema.
             <br/>:'(</h3>
     {% endfor %}
         </tbody>

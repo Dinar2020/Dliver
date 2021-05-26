@@ -1,29 +1,31 @@
 {% extends 'adminlte/base.html' %}
 {% block content %}
-    <h1>Página de listagem de venda</h1>
-    <a href="{% url 'cadastrar_venda' %}">CADASTRAR VENDA</a>
+    <h1>Página de listagem de Produtos</h1>
+    <a href="{% url 'cadastrar_produto' %}">CADASTRAR PRODUTO</a>
 
     <table>
         <thead>
             <th>ID</th>
             <th>NOME</th>
-            <th>VALOR</th>
-            <th>DATA DA VENDA</th>
-            <th>CLIENTE</th>
-            <th>AÇÕES</th>
+            <th>TAMANHO</th>
+            <th>FORNECEDOR</th>
+            <th>QUANTIDADE</th>
+            <th>NACIONALIDADE</th>
         </thead>
         <tbody>
-    {% for obj_venda in object_list %}
+    {% for obj_produto in object_list %}
             <tr>
-                <td>{{obj_venda.pk}}</td>
-                <td>{{obj_venda.nome}}</td>
-                <td>{{obj_venda.valor}}</td>
-                <td>{{obj_venda.data_venda}}</td>
-                <td>{{obj_venda.cliente}}</td>
-                <td><a href="{% url 'atualizar_venda' obj_venda.pk %}">ATUALIZAR</a></td>
+                <td>{{obj_produto.pk}}</td>
+                <td>{{obj_produto.nome}}</td>
+                <td>{{obj_produto.valor}}</td>
+                <td>{{obj_produto.tamanho}}</td>
+                <td>{{obj_produto.fornecedor}}</td>
+                <td>{{obj_produto.quantidade}}</td>
+                <td>{{obj_produto.nacionalidade_do_produto}}</td>
+                <td><a href="{% url 'atualizar_produto' obj_produto.pk %}">ATUALIZAR</a></td>
             </tr>
     {% empty %}
-        <h3>Desculpe, você ainda nao possui vendas cadastradas em seu sistema.
+        <h3>Desculpe, você ainda nao possui produtos cadastrados em seu sistema.
             <br/>:'(</h3>
     {% endfor %}
         </tbody>
