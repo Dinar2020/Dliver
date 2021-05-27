@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.views.generic import CreateView, ListView, UpdateView
-from .models import Venda, Produto, EntregaProduto, Cliente, ClientePegueLeve, Fornecedor
+from .models import Venda, Produto, EntregaProduto, Cliente, ClientePegueLeve, Fornecedor, Faq
+
 from django.urls import reverse_lazy
+from django.contrib import messages
 
 # Create your views here.
 
@@ -43,8 +45,8 @@ class ProdutoCreateView(CreateView):
     fields = '__all__'
 
     def get_success_url(self):
+        messages.success(self.request, 'Produto cadastrado com sucesso!')
         return reverse_lazy('cadastrar_produto')
-
 
 class ProdutoListView(ListView):
     model = Produto
@@ -59,6 +61,7 @@ class ProdutoUpdateView(UpdateView):
     fields = '__all__'
 
     def get_success_url(self):
+        messages.success(self.request, 'Produto Atualizado com sucesso!')
         return reverse_lazy('listar_produto')
 
 ####################### PRODUTO ###################################
@@ -71,7 +74,9 @@ class EntregaProdutoCreateView(CreateView):
     fields = '__all__'
 
     def get_success_url(self):
+        messages.success(self.request, 'Produto cadastrado com sucesso!')
         return reverse_lazy('cadastrar_entrega_produto')
+
 
 
 class EntregaProdutoListView(ListView):
@@ -87,6 +92,7 @@ class EntregaProdutoUpdateView(UpdateView):
     fields = '__all__'
 
     def get_success_url(self):
+        messages.success(self.request, 'Entrega do Produto Atualizado com sucesso!')
         return reverse_lazy('listar_entrega_produto')
 
 ####################### ENTREGA PRODUTO ###################################
@@ -99,6 +105,7 @@ class ClienteCreateView(CreateView):
     fields = '__all__'
 
     def get_success_url(self):
+        messages.success(self.request, 'Cliente cadastrado com sucesso!')
         return reverse_lazy('cadastrar_cliente')
 
 
@@ -115,6 +122,7 @@ class  ClienteUpdateView(UpdateView):
     fields = '__all__'
 
     def get_success_url(self):
+        messages.success(self.request, 'Cliente atualizado com sucesso!')
         return reverse_lazy('listar_cliente')
 
 ####################### CLIENTE ###################################
@@ -127,7 +135,8 @@ class ClientePegueLeveCreateView(CreateView):
     fields = '__all__'
 
     def get_success_url(self):
-        return reverse_lazy('cadastrar_clientepegueleve')
+        messages.success(self.request, 'Cliente Atualizado com sucesso!')
+        return reverse_lazy('atualizar_clientepegueleve')
 
 
 class ClientePegueLeveListView(ListView):
@@ -143,6 +152,7 @@ class ClientePegueLeveUpdateView(UpdateView):
     fields = '__all__'
 
     def get_success_url(self):
+        messages.success(self.request, 'Cliente atualizado com sucesso!')
         return reverse_lazy('listar_clientepegueleve')
 
 ####################### CLIENTE PEGUE-LEVE ###################################
@@ -155,7 +165,8 @@ class FornecedorCreateView(CreateView):
     fields = '__all__'
 
     def get_success_url(self):
-        return reverse_lazy('cadastrar_fornecedor')
+        messages.success(self.request, 'Fornecedor cadastrado com sucesso!')
+        return reverse_lazy('cadastrar_fornacedor')
 
 
 class FornecedorListView(ListView):
@@ -171,6 +182,37 @@ class FornecedorUpdateView(UpdateView):
     fields = '__all__'
 
     def get_success_url(self):
+        messages.success(self.request, 'Fornecedor Atualizado com sucesso!')
         return reverse_lazy('listar_fornecedor')
 
 ####################### FORNECEDOR ###################################
+
+####################### FAQ  ###################################
+
+class FaqCreateView(CreateView):
+    model = Faq
+    template_name = 'cadastrar/faq.html'
+    fields = '__all__'
+
+    def get_success_url(self):
+        messages.success(self.request, 'FAQ cadastrado com sucesso!')
+        return reverse_lazy('cadastrar_faq')
+
+
+class FaqListView(ListView):
+    model = Faq
+    template_name = 'listar/faq.html'
+    paginate_by = 5
+
+
+class FaqUpdateView(UpdateView):
+    model = Faq
+    template_name = 'atualizar/faq.html'
+
+    fields = '__all__'
+
+    def get_success_url(self):
+        messages.success(self.request, 'FAQ atualizado com sucesso!')
+        return reverse_lazy('listar_faq')
+
+####################### FAQ ###################################

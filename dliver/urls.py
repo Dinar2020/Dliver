@@ -30,5 +30,10 @@ urlpatterns = [
     path('listar/fornecedor', ClientePegueLeveListView.as_view(), name="listar_fornecedor"),
     path('atualizar/fornecedor/<int:pk>', ClientePegueLeveUpdateView.as_view(),name="atualizar_fornecedor"),
 
+    path('cadastrar/faq', ClientePegueLeveCreateView.as_view(), name="cadastrar_faq"),
+    path('listar/faq', ClientePegueLeveListView.as_view(), name="listar_faq"),
+    path('atualizar/faq/<int:pk>', ClientePegueLeveUpdateView.as_view(),name="atualizar_faq"),
+
+
 ]
 

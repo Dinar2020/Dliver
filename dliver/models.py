@@ -196,3 +196,11 @@ class Fornecedor(models.Model):
 
     def __str__(self):
         return str(self.nome_empresa)
+
+class Faq(models.Model):
+    nome = models.CharField(max_length=255, blank=False, null=False, verbose_name='Nome completo')
+    duvida = models.TextField(blank=True, null=True, verbose_name='Duvida')
+    email = models.EmailField(blank=False, null=True, verbose_name='E-mail')
+
+    def __str__(self):
+        return str(self.nome)
