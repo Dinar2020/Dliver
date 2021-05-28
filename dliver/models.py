@@ -75,6 +75,8 @@ class CadastroRestaurante(models.Model):
     email_da_empresa = models.EmailField(blank=False, null=True, verbose_name='E-mail da Empresa')
     CATEGORIA_CHOICES = (('B', 'Bebida'), ('H', 'Hamburguer'), ('Pi', 'Pizza') , ('Pa', 'Passaporte'), ('Pas', 'Pastel'))
     ramo = models.CharField(choices=CATEGORIA_CHOICES, max_length=128, verbose_name='Ramo da empresa', default=5)
+    telefone = models.CharField(max_length=12, blank=False, null=False, verbose_name='Telefone')
+    observacao = models.TextField(blank=True, null=True, verbose_name="Observação Comorbidade")
 
 
     def __str__(self):

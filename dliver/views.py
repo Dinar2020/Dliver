@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import CreateView, ListView, UpdateView
-from .models import Venda, Produto, EntregaProduto, Cliente, ClientePegueLeve, Fornecedor, Faq
+from .models import Venda, Produto, EntregaProduto, Cliente, ClientePegueLeve, Fornecedor, Faq, CadastroRestaurante
 
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -216,3 +216,34 @@ class FaqUpdateView(UpdateView):
         return reverse_lazy('listar_faq')
 
 ####################### FAQ ###################################
+
+######################## CADASTRO RESTAURANTE ####################################
+
+class CadastroRestauranteCreateView(CreateView):
+    model = CadastroRestaurante
+    template_name = 'cadastrar/cadastrorestaurante.html'
+
+    fields = '__all__'
+
+    def get_success_url(self):
+        messages.success(self.request, 'Cadastro do Restaurante realizado com sucesso!')
+        return reverse_lazy("listar_cadastrorestaurante")
+
+
+class CadastroRestauranteListView(ListView):
+    model = CadastroRestaurante
+    template_name = 'listar/cadastrorestaurante.html'
+    paginate_by = 5
+
+
+class CadastroRestauranteUpdateView(UpdateView):
+    model = CadastroRestaurante
+    template_name = 'atualizar/cadastrorestaurante.html'
+
+    fields = '__all__'
+
+    def get_success_url(self):
+        messages.success(self.request, 'Cadastro do Restaurante atualizado com sucesso!')
+        return reverse_lazy('listar_cadastrorestaurante')
+
+######################## CADASTRO RESTAURANTE ####################################

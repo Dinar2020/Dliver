@@ -1,0 +1,58 @@
+{% extends 'adminlte/base.html' %}
+{% block content %}
+    <h1>LISTAGEM DOS CLIENTE</h1>
+    <a href="{% url 'cadastrorestaurante' %}">CADASTRAR RESTAURANTE</a>
+
+    <table>
+        <thead>
+            <th>ID</th>
+            <th>NOME DA EMPRESA</th>
+            <th>ENDEREÇO</th>
+            <th>CNPJ</th>
+            <th>RAMO</th>
+            <th>CIDADE</th>
+            <th>CATEGORIA</th>
+            <th>EMAIL</th>
+            <th>TELEFONE</th>
+        </thead>
+        <tbody>
+    {% for obj_cadastrorestaurante in object_cadastrorestaurante %}
+            <tr>
+                <td>{{obj_produto.pk}}</td>
+                <td>{{obj_produto.nome_restaurante}}</td>
+                <td>{{obj_produto.endereco}}</td>
+                <td>{{obj_produto.cnpj}}</td>
+                <td>{{obj_produto.ramo}}</td>
+                <td>{{obj_produto.CATEGORIA_CHOICES}}</td>
+                <td>{{obj_produto.email_da_empresa}}</td>
+                <td>{{obj_produto.tel}}</td>
+
+                <td><a href="{% url 'atualizar_cadastrorestaurante' obj_cadastrorestaurante.pk %}">ATUALIZAR</a></td>
+            </tr>
+    {% empty %}
+        <h3>Desculpe, você ainda nao possui restaurantes cadastrados em seu sistema.
+            <br/>:'(</h3>
+    {% endfor %}
+        </tbody>
+    </table>
+
+    {% if is_paginated %}
+        <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1">&laquo; Primeira Página |</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">Página Anterior </a>
+                {% endif %}
+
+                <span class="current">
+                    | Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}. |
+                </span>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">Próxima Página</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">| Última Página &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    {% endif %}
+{% endblock %}

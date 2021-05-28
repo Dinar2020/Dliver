@@ -3,7 +3,7 @@ from django.urls import path
 from .views import VendaCreateView, VendaListView, VendaUpdateView, ProdutoCreateView,\
     ProdutoUpdateView, ProdutoListView, EntregaProdutoCreateView, EntregaProdutoListView, EntregaProdutoUpdateView,\
     ClienteCreateView, ClienteListView, ClienteUpdateView, ClientePegueLeveCreateView, ClientePegueLeveListView,\
-    ClientePegueLeveUpdateView
+    ClientePegueLeveUpdateView, CadastroRestauranteCreateView, CadastroRestauranteListView, CadastroRestauranteUpdateView
 
 urlpatterns = [
     path('cadastrar/venda', VendaCreateView.as_view(), name="cadastrar_venda"),
@@ -34,6 +34,8 @@ urlpatterns = [
     path('listar/faq', ClientePegueLeveListView.as_view(), name="listar_faq"),
     path('atualizar/faq/<int:pk>', ClientePegueLeveUpdateView.as_view(),name="atualizar_faq"),
 
-
+    path('cadastrar/cadastrorestaurante', CadastroRestauranteCreateView.as_view(), name="cadastrar_cadastrorestaurante"),
+    path('listar/cadastrorestaurante', CadastroRestauranteListView.as_view(), name="listar_cadastrorestaurante"),
+    path('atualizar/cadastrorestaurante/<int:pk>', CadastroRestauranteUpdateView.as_view(), name="atualizar_cadastrorestaurante"),
 ]
 
