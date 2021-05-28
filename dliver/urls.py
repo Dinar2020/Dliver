@@ -3,7 +3,8 @@ from django.urls import path
 from .views import VendaCreateView, VendaListView, VendaUpdateView, ProdutoCreateView,\
     ProdutoUpdateView, ProdutoListView, EntregaProdutoCreateView, EntregaProdutoListView, EntregaProdutoUpdateView,\
     ClienteCreateView, ClienteListView, ClienteUpdateView, ClientePegueLeveCreateView, ClientePegueLeveListView,\
-    ClientePegueLeveUpdateView, CadastroRestauranteCreateView, CadastroRestauranteListView, CadastroRestauranteUpdateView
+    ClientePegueLeveUpdateView, CadastroRestauranteCreateView, CadastroRestauranteListView, CadastroRestauranteUpdateView,\
+    FormasPagamentoCreateView, FormasPagamentoListView, FormasPagamentoUpdateView
 
 urlpatterns = [
     path('cadastrar/venda', VendaCreateView.as_view(), name="cadastrar_venda"),
@@ -37,5 +38,11 @@ urlpatterns = [
     path('cadastrar/cadastrorestaurante', CadastroRestauranteCreateView.as_view(), name="cadastrar_cadastrorestaurante"),
     path('listar/cadastrorestaurante', CadastroRestauranteListView.as_view(), name="listar_cadastrorestaurante"),
     path('atualizar/cadastrorestaurante/<int:pk>', CadastroRestauranteUpdateView.as_view(), name="atualizar_cadastrorestaurante"),
+
+    path('cadastrar/formaspagamento', FormasPagamentoCreateView.as_view(), name="cadastrar_formaspagamento"),
+    path('listar/formaspagamento', FormasPagamentoListView.as_view(), name="listar_formaspagamento"),
+    path('atualizar/formaspagamento/<int:pk>', FormasPagamentoUpdateView.as_view(), name="atualizar_formaspagamento")
+
+
 ]
 

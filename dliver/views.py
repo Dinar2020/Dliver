@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import CreateView, ListView, UpdateView
-from .models import Venda, Produto, EntregaProduto, Cliente, ClientePegueLeve, Fornecedor, Faq, CadastroRestaurante
+from .models import Venda, Produto, EntregaProduto, Cliente, ClientePegueLeve, Fornecedor, Faq, CadastroRestaurante,\
+    FormasPagamento
 
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -247,3 +248,34 @@ class CadastroRestauranteUpdateView(UpdateView):
         return reverse_lazy('listar_cadastrorestaurante')
 
 ######################## CADASTRO RESTAURANTE ####################################
+
+######################## FORMAS DE PAGAMENTO ####################################
+
+class FormasPagamentoCreateView(CreateView):
+    model = FormasPagamento
+    template_name = 'cadastrar/formaspagamento.html'
+
+    fields = '__all__'
+
+    def get_success_url(self):
+        messages.success(self.request, 'Forma de pagamento realizado com sucesso!')
+        return reverse_lazy("listar_formaspagamento")
+
+
+class FormasPagamentoListView(ListView):
+    model = CadastroRestaurante
+    template_name = 'listar/formaspagamento.html'
+    paginate_by = 5
+
+
+class FormasPagamentoUpdateView(UpdateView):
+    model = CadastroRestaurante
+    template_name = 'atualizar/formaspagamento.html'
+
+    fields = '__all__'
+
+    def get_success_url(self):
+        messages.success(self.request, 'Forma de pagamento atualizado com sucesso!')
+        return reverse_lazy('listar_formaspagamento')
+
+######################## FORMAS DE PAGAMENTO ####################################

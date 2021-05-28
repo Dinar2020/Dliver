@@ -38,8 +38,11 @@ class Produto(models.Model):
 class FormasPagamento(models.Model):
     nome_restaurante = models.ForeignKey('CadastroRestaurante', on_delete=models.DO_NOTHING, default=1,
                                          verbose_name='Nome do Restaurante')
+    nome_cliente = models.ForeignKey('Cliente', on_delete=models.DO_NOTHING, default=1,
+                                         verbose_name='Nome do Cliente')
     pix = models.BooleanField(blank=False, null=False)
     cartaodecredito = models.BooleanField(blank=False, null=False)
+    cartaodedebito  = models.BooleanField(blank=False, null=False)
     criptomoeda = models.BooleanField(blank=False, null=False)
     aplicativo_pagamento = models.BooleanField(blank=False, null=False)
     pontos_pagamento= models.BooleanField(blank=False, null=False)

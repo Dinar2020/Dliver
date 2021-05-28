@@ -1,0 +1,59 @@
+{% extends 'adminlte/base.html' %}
+{% block content %}
+    <h1>LISTAGEM DAS FORMAS DE PAGAMENTO</h1>
+    <a href="{% url 'cadastrar_formaspagamento' %}">CADASTRAR FORMAS DE PAGAMENTO</a>
+
+    <table>
+        <thead>
+            <th>ID</th>
+            <th>NOME DO RESTAURANTE</th>
+            <th>NOME DO CLIENTE</th>
+            <th>PIX</th>
+            <th>CARTÃO DE CREDITO</th>
+            <th>CARTÃO DE DEBITO</th>
+            <th>CRIPTOMOEDA</th>
+            <th>APLICATIVO DE PAGAMENTO</th>
+            <th>PONTO NO PAGAMENTO</th>
+        </thead>
+        <tbody>
+    {% for obj_formaspagamento in object_formaspagamento %}
+            <tr>
+                <td>{{obj_produto.pk}}</td>
+                <td>{{obj_produto.nome_restaurante}}</td>
+                <td>{{obj_produto.nome_cliente}}</td>
+                <td>{{obj_produto.pix}}</td>
+                <td>{{obj_produto.cartaodecredito}}</td>
+                <td>{{obj_produto.cartaodedebito}}</td>
+                <td>{{obj_produto.criptomoeda}}</td>
+                <td>{{obj_produto.aplicativo_pagamento}}</td>
+                <td>{{obj_produto.pontos_pagamento}}</td>
+
+                <td><a href="{% url 'atualizar_formaspagamento' obj_formaspagamento.pk %}">ATUALIZAR</a></td>
+            </tr>
+    {% empty %}
+        <h3>Desculpe, você ainda nao possui pagamentos cadastrados em seu sistema.
+            <br/>:'(</h3>
+    {% endfor %}
+        </tbody>
+    </table>
+
+    {% if is_paginated %}
+        <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1">&laquo; Primeira Página |</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">Página Anterior </a>
+                {% endif %}
+
+                <span class="current">
+                    | Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}. |
+                </span>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">Próxima Página</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">| Última Página &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    {% endif %}
+{% endblock %}
