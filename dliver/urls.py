@@ -4,7 +4,8 @@ from .views import VendaCreateView, VendaListView, VendaUpdateView, ProdutoCreat
     ProdutoUpdateView, ProdutoListView, EntregaProdutoCreateView, EntregaProdutoListView, EntregaProdutoUpdateView,\
     ClienteCreateView, ClienteListView, ClienteUpdateView, ClientePegueLeveCreateView, ClientePegueLeveListView,\
     ClientePegueLeveUpdateView, CadastroRestauranteCreateView, CadastroRestauranteListView, CadastroRestauranteUpdateView,\
-    FormasPagamentoCreateView, FormasPagamentoListView, FormasPagamentoUpdateView
+    FormasPagamentoCreateView, FormasPagamentoListView, FormasPagamentoUpdateView, CadastroAtendenteCreateView, \
+    CadastroAtendenteListView, CadastroAtendenteUpdateView
 
 urlpatterns = [
     path('cadastrar/venda', VendaCreateView.as_view(), name="cadastrar_venda"),
@@ -43,6 +44,8 @@ urlpatterns = [
     path('listar/formaspagamento', FormasPagamentoListView.as_view(), name="listar_formaspagamento"),
     path('atualizar/formaspagamento/<int:pk>', FormasPagamentoUpdateView.as_view(), name="atualizar_formaspagamento")
 
-
+    path('cadastrar/cadastroatendente', CadastroAtendenteCreateView.as_view(), name="cadastrar_cadastroatendente"),
+    path('listar/cadastroatendente', CadastroAtendenteListView.as_view(), name="listar_cadastroatendente"),
+    path('atualizar/cadastroatendente/<int:pk>', CadastroAtendenteUpdateView.as_view(), name="atualizar_cadastroatendente")
 ]
 

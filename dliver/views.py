@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import CreateView, ListView, UpdateView
 from .models import Venda, Produto, EntregaProduto, Cliente, ClientePegueLeve, Fornecedor, Faq, CadastroRestaurante,\
-    FormasPagamento
+    FormasPagamento, CadastroAtendente
 
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -279,3 +279,34 @@ class FormasPagamentoUpdateView(UpdateView):
         return reverse_lazy('listar_formaspagamento')
 
 ######################## FORMAS DE PAGAMENTO ####################################
+
+######################## CADASTRO ATENDENTE ####################################
+
+class CadastroAtendenteCreateView(CreateView):
+    model = CadastroAtendente
+    template_name = 'cadastrar/cadastroatendente.html'
+
+    fields = '__all__'
+
+    def get_success_url(self):
+        messages.success(self.request, 'Atendente cadastrado com sucesso!')
+        return reverse_lazy("listar_cadastroatendente")
+
+
+class CadastroAtendenteListView(ListView):
+    model = CadastroAtendente
+    template_name = 'listar/cadastroatendente.html'
+    paginate_by = 5
+
+
+class CadastroAtendenteUpdateView(UpdateView):
+    model = CadastroAtendente
+    template_name = 'atualizar/cadastroatendente.html'
+
+    fields = '__all__'
+
+    def get_success_url(self):
+        messages.success(self.request, 'Cadastro do atendente atualizado com sucesso!')
+        return reverse_lazy('listar_cadastroatendente')
+
+######################## CADASTRO ATENDENTE ####################################
