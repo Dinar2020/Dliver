@@ -3,8 +3,12 @@ from django.urls import path
 from .views import VendaCreateView, VendaListView, VendaCorrecaoUpdateView, VendaAtualizarObservacaoView,\
     VendaAtualizarClienteView, VendaView, VendaDetailView, VendaPDFDetailView, ProdutoCreateView,\
     ProdutoUpdateView, ProdutoListView, EntregaProdutoCreateView, EntregaProdutoListView, EntregaProdutoUpdateView,\
-    ClienteCreateView, ClienteListView, ClienteUpdateView, CadastroFornecedorCreateView, CadastroFornecedorListView, \
-    CadastroFornecedorUpdateView, FormasPagamentoCreateView, FormasPagamentoListView, FormasPagamentoUpdateView
+    ClienteCreateView, ClienteListView, ClienteUpdateView, CadastroFornecedorCreateView, CadastroFornecedorListView,\
+    CadastroFornecedorUpdateView, FormasPagamentoCreateView, FormasPagamentoListView, FormasPagamentoUpdateView,\
+    CadastroAtendenteCreateView, CadastroAtendenteListView, CadastroAtendenteUpdateView,\
+    RegistroCupomCreateView, RegistroCupomListView, RegistroCupomUpdateView, CadastroRestauranteCreateView,\
+    CadastroRestauranteListView, CadastroRestauranteUpdateView,\
+    FazerPedidoCreateView, FazerPedidoListView, FazerPedidoUpdateView
 
 urlpatterns = [
     path('cadastrar/venda', VendaCreateView.as_view(), name="cadastrar_venda"),
@@ -37,4 +41,20 @@ urlpatterns = [
     path('cadastrar/formaspagamento', FormasPagamentoCreateView.as_view(), name="cadastrar_formaspagamento"),
     path('listar/formaspagamento', FormasPagamentoListView.as_view(), name="listar_formaspagamento"),
     path('atualizar/formaspagamento/<int:pk>', FormasPagamentoUpdateView.as_view(), name="atualizar_formaspagamento"),
+
+    path('cadastrar/cadastroatendente', CadastroAtendenteCreateView.as_view(), name="cadastrar_atendente"),
+    path('listar/cadastroatendente', CadastroAtendenteListView.as_view(), name="listar_atendente"),
+    path('atualizar/cadastroatendente/<int:pk>', CadastroAtendenteUpdateView.as_view(), name="atualizar_atendente"),
+
+    path('cadastrar/registrocupom', RegistroCupomCreateView.as_view(), name="cadastrar_registrocupom"),
+    path('listar/registrocupom', RegistroCupomListView.as_view(), name="listar_registrocupom"),
+    path('atualizar/registrocupom/<int:pk>', RegistroCupomUpdateView.as_view(), name="atualizar_registrocupom"),
+
+    path('cadastrar/restaurante', CadastroRestauranteCreateView.as_view(), name="cadastrar_restaurante"),
+    path('listar/restaurante', CadastroRestauranteListView.as_view(), name="listar_restaurante"),
+    path('atualizar/restaurante/<int:pk>', CadastroRestauranteUpdateView.as_view(), name="atualizar_restaurante"),
+
+    path('cadastrar/pedido', FazerPedidoCreateView.as_view(), name="cadastrar_pedido"),
+    path('listar/pedido', FazerPedidoListView.as_view(), name="listar_pedido"),
+    path('atualizar/pedido/<int:pk>', FazerPedidoUpdateView.as_view(), name="atualizar_pedido"),
 ]

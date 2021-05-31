@@ -11,6 +11,7 @@ from easy_pdf.views import PDFTemplateResponseMixin
 
 ######################## VENDA ####################################
 
+
 class VendaCreateView(CreateView):
     form_class = VendaForm
     model = Venda
@@ -38,6 +39,7 @@ class VendaUpdateView(UpdateView):
     def get_success_url(self):
         return reverse_lazy('listar_venda')
 
+
 class VendaCorrecaoUpdateView(UpdateView):
     model = Venda
     form_class = VendaForm
@@ -47,6 +49,7 @@ class VendaCorrecaoUpdateView(UpdateView):
         messages.success(self.request, 'Venda atualizada com sucesso!')
         return reverse_lazy('listar_venda')
 
+
 class VendaAtualizarObservacaoView(UpdateView):
     model = Venda
     form_class = VendaObservacaoForm
@@ -55,6 +58,7 @@ class VendaAtualizarObservacaoView(UpdateView):
     def get_success_url(self):
         messages.success(self.request, 'Observação da venda atualizada com sucesso!')
         return reverse_lazy('listar_venda')
+
 
 class VendaAtualizarClienteView(UpdateView):
     model = Venda
@@ -119,6 +123,7 @@ class ProdutoUpdateView(UpdateView):
 
 ####################### ENTREGA PRODUTO ###################################
 
+
 class EntregaProdutoCreateView(CreateView):
     model = EntregaProduto
     template_name = 'cadastrar/entrega_produto.html'
@@ -177,6 +182,7 @@ class  ClienteUpdateView(UpdateView):
 
 ####################### FORNECEDOR  ###################################
 
+
 class CadastroFornecedorCreateView(CreateView):
     model = CadastroFornecedor
     template_name = 'cadastrar/fornecedor.html'
@@ -205,6 +211,7 @@ class CadastroFornecedorUpdateView(UpdateView):
 ####################### FORNECEDOR ###################################
 
 ######################## FormasPagamento ####################################
+
 
 class FormasPagamentoCreateView(CreateView):
     model = FormasPagamento
@@ -235,6 +242,7 @@ class FormasPagamentoUpdateView(UpdateView):
 ######################## FormasPagamento ####################################
 
 ######################## CadastroAtendente ####################################
+
 
 class CadastroAtendenteCreateView(CreateView):
     model = CadastroAtendente
@@ -267,7 +275,7 @@ class CadastroAtendenteUpdateView(UpdateView):
 
 ######################## RegistroCupom ####################################
 
-class CadastroLocalDeEntregaCreateView(CreateView):
+class RegistroCupomCreateView(CreateView):
     model = RegistroCupom
     template_name = 'cadastrar/registrocupom.html'
 
@@ -278,13 +286,13 @@ class CadastroLocalDeEntregaCreateView(CreateView):
         return reverse_lazy('listar_registrocupom')
 
 
-class CadastroLocalDeEntregaListView(ListView):
+class RegistroCupomListView(ListView):
     model = RegistroCupom
     template_name = 'listar/registrocupom.html'
     paginate_by = 5
 
 
-class CadastroLocalDeEntregaUpdateView(UpdateView):
+class RegistroCupomUpdateView(UpdateView):
     model = RegistroCupom
     template_name = 'atualizar/registrocupom.html'
 
@@ -296,6 +304,7 @@ class CadastroLocalDeEntregaUpdateView(UpdateView):
 ######################## RegistroCupom ####################################
 
 ######################## CadastroRestaurante ####################################
+
 
 class CadastroRestauranteCreateView(CreateView):
     model = CadastroRestaurante
@@ -326,6 +335,7 @@ class CadastroRestauranteUpdateView(UpdateView):
 ######################## CadastroRestaurante ####################################
 
 ######################## FazerPedido ####################################
+
 
 class FazerPedidoCreateView(CreateView):
     model = FazerPedido
