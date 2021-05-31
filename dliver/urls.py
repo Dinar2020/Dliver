@@ -1,15 +1,22 @@
 from django.contrib import admin
 from django.urls import path
-from .views import VendaCreateView, VendaListView, VendaUpdateView, ProdutoCreateView,\
+from .views import VendaCreateView, VendaListView, VendaCorrecaoUpdateView, VendaAtualizarObservacaoView,\
+    VendaAtualizarClienteView, VendaView, VendaDetailView, VendaPDFDetailView, ProdutoCreateView,\
     ProdutoUpdateView, ProdutoListView, EntregaProdutoCreateView, EntregaProdutoListView, EntregaProdutoUpdateView,\
-    ClienteCreateView, ClienteListView, ClienteUpdateView, ClientePegueLeveCreateView, ClientePegueLeveListView,\
-    ClientePegueLeveUpdateView, CadastroFornecedorCreateView, CadastroFornecedorListView, CadastroFornecedorUpdateView,\
-    FormasPagamentoCreateView, FormasPagamentoListView, FormasPagamentoUpdateView,CadastroAtendenteCreateView
+    ClienteCreateView, ClienteListView, ClienteUpdateView, CadastroFornecedorCreateView, CadastroFornecedorListView, \
+    CadastroFornecedorUpdateView, FormasPagamentoCreateView, FormasPagamentoListView, FormasPagamentoUpdateView
 
 urlpatterns = [
     path('cadastrar/venda', VendaCreateView.as_view(), name="cadastrar_venda"),
     path('listar/venda', VendaListView.as_view(), name="listar_venda"),
-    path('atualizar/venda/<int:pk>', VendaUpdateView.as_view(), name="atualizar_venda"),
+    path('atualizar/venda/<int:pk>', VendaCorrecaoUpdateView.as_view(), name="corrigir_venda"),
+    path('atualizar/venda/observacao/<int:pk>', VendaAtualizarObservacaoView.as_view(),
+         name="atualizar_observacao_venda"),
+    path('atualizar/venda/cliente/<int:pk>', VendaAtualizarClienteView.as_view(), name="atualizar_cliente_venda"),
+    path('ajax/desabilitar/venda/<int:pk>', VendaView.desabilitarVenda, name="ajax_desabilitar_venda"),
+    path('ajax/habilitar/venda/<int:pk>', VendaView.habilitarVenda, name="ajax_habilitar_venda"),
+    path('detalhes/venda/<int:pk>', VendaDetailView.as_view(), name="detalhes_venda"),
+    path('pdf/venda/<int:pk>', VendaPDFDetailView.as_view(), name="pdf_venda"),
 
     path('cadastrar/produto', ProdutoCreateView.as_view(), name="cadastrar_produto"),
     path('listar/produto', ProdutoListView.as_view(), name="listar_produto"),
@@ -23,15 +30,11 @@ urlpatterns = [
     path('listar/cliente', ClienteListView.as_view(), name="listar_entrega_cliente"),
     path('atualizar/cliente/<int:pk>', ClienteUpdateView.as_view(), name="atualizar_cliente"),
 
-    path('cadastrar/clientepegueleve', ClientePegueLeveCreateView.as_view(), name="cadastrar_clientepegueleve"),
-    path('listar/clientepegueleve', ClientePegueLeveListView.as_view(), name="listar_entrega_clientepegueleve"),
-    path('atualizar/clientepegueleve/<int:pk>', ClientePegueLeveUpdateView.as_view(), name="atualizar_clientepegueleve"),
-
     path('cadastrar/fornecedor', CadastroFornecedorCreateView.as_view(), name="cadastrar_fornecedor"),
     path('listar/fornecedor', CadastroFornecedorListView.as_view(), name="listar_fornecedor"),
     path('atualizar/fornecedor/<int:pk>', CadastroFornecedorUpdateView.as_view(), name="atualizar_fornecedor"),
 
-    path('cadastrar/formaspagamento', FormasPagamentoCreateView.as_view(), name="cadastrar_formas_pagamento"),
-    path('listar/formaspagamento', FormasPagamentoListView(), name="listar_formas_pagamento"),
-    path('atualizar/formaspagamento/<int:pk>', FormasPagamentoUpdateView.as_view(), name="atualizar_formas_pagamento"),
+    path('cadastrar/formaspagamento', FormasPagamentoCreateView.as_view(), name="cadastrar_formaspagamento"),
+    path('listar/formaspagamento', FormasPagamentoListView.as_view(), name="listar_formaspagamento"),
+    path('atualizar/formaspagamento/<int:pk>', FormasPagamentoUpdateView.as_view(), name="atualizar_formaspagamento"),
 ]

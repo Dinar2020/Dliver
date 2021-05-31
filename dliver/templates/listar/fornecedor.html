@@ -11,22 +11,24 @@
             <th>CEP</th>
             <th>CNPJ</th>
             <th>RAMO DE ATUAÇÃO</th>
-            <th>EMAIL DA EMPRESA</th>
-            <th>CATEGORIA</th>
+            <th>EMAIL DO FORNECEDOR</th>
+            <th>EMPRESA FORNECIDA</th>
             <th>TELEFONE</th>
+            <th>OBSERVAÇÃO</th>
         </thead>
         <tbody>
-    {% for obj_fornecedor in object_fornecedor %}
+    {% for obj_fornecedor in object_list %}
             <tr>
-                <td>{{obj_produto.pk}}</td>
-                <td>{{obj_produto.nome_empresa}}</td>
-                <td>{{obj_produto.endere}}</td>
-                <td>{{obj_produto.cep}}</td>
-                <td>{{obj_produto.cnpj}}</td>
-                <td>{{obj_produto.ramo_atuacao}}</td>
-                <td>{{obj_produto.email_empresa}}</td>
-                <td>{{obj_produto.categoria_CHOICE}}</td>
-                <td>{{obj_produto.telefone}}</td>
+                <td>{{obj_fornecedor.pk}}</td>
+                <td>{{obj_fornecedor.nome_empresa}}</td>
+                <td>{{obj_fornecedor.endere}}</td>
+                <td>{{obj_fornecedor.cep}}</td>
+                <td>{{obj_fornecedor.cnpj}}</td>
+                <td>{{obj_fornecedor.ramo_atuacao}}</td>
+                <td>{{obj_fornecedor.email_do_fornecedor}}</td>
+                <td>{{obj_fornecedor.empresa_fornecida}}</td>
+                <td>{{obj_fornecedor.telefone}}</td>
+                <td>{{obj_fornecedor.observacao}}</td>
 
                 <td><a href="{% url 'atualizar_fornecedor' obj_fornecedor.pk %}">ATUALIZAR</a></td>
             </tr>

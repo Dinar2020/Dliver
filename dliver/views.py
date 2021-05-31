@@ -1,21 +1,26 @@
 from django.shortcuts import render
-from django.views.generic import CreateView, ListView, UpdateView
-from .models import Venda, Produto, EntregaProduto, Cliente, ClientePegueLeve, CadastroFornecedor, FormasPagamento, \
-    CadastroAtendente, CadastroLocalDeEntrega, CadastroRestaurante, FazerPedido
+from django.views.generic import CreateView, ListView, UpdateView,View, DetailView
+from .models import Venda, Produto, EntregaProduto, Cliente, CadastroFornecedor, FormasPagamento,\
+    CadastroAtendente, CadastroRestaurante, FazerPedido, RegistroCupom
+from django.contrib import messages
 from django.urls import reverse_lazy
-
+from django.http import HttpResponseRedirect
+from .forms import VendaForm, VendaObservacaoForm, VendaClienteForm
+from easy_pdf.views import PDFTemplateResponseMixin
 # Create your views here.
 
 ######################## VENDA ####################################
 
 class VendaCreateView(CreateView):
+    form_class = VendaForm
     model = Venda
     template_name = 'cadastrar/venda.html'
 
     fields = '__all__'
 
     def get_success_url(self):
-        return reverse_lazy("listar_venda")
+        messages.success(self.request, 'Venda cadastrada com sucesso!')
+        return reverse_lazy('cadastrar_venda')
 
 
 class VendaListView(ListView):
@@ -33,6 +38,53 @@ class VendaUpdateView(UpdateView):
     def get_success_url(self):
         return reverse_lazy('listar_venda')
 
+class VendaCorrecaoUpdateView(UpdateView):
+    model = Venda
+    form_class = VendaForm
+    template_name = 'atualizar/venda.html'
+
+    def get_success_url(self):
+        messages.success(self.request, 'Venda atualizada com sucesso!')
+        return reverse_lazy('listar_venda')
+
+class VendaAtualizarObservacaoView(UpdateView):
+    model = Venda
+    form_class = VendaObservacaoForm
+    template_name = 'atualizar/venda_observacao.html'
+
+    def get_success_url(self):
+        messages.success(self.request, 'Observação da venda atualizada com sucesso!')
+        return reverse_lazy('listar_venda')
+
+class VendaAtualizarClienteView(UpdateView):
+    model = Venda
+    form_class = VendaClienteForm
+    template_name = 'atualizar/venda_cliente.html'
+
+    def get_success_url(self):
+        messages.success(self.request, 'Cliente da venda atualizada com sucesso!')
+        return reverse_lazy('listar_venda')
+
+
+class VendaView(View):
+    def desabilitarVenda(self, pk: int):
+        Venda.objects.filter(id=pk).update(excluido=True)
+        return HttpResponseRedirect(reverse_lazy('listar_venda'))
+
+    def habilitarVenda(self, pk: int):
+        Venda.objects.filter(id=pk).update(excluido=False)
+        return HttpResponseRedirect(reverse_lazy('listar_venda'))
+
+
+class VendaDetailView(DetailView):
+    model = Venda
+    template_name = 'detalhes/venda.html'
+
+
+class VendaPDFDetailView(PDFTemplateResponseMixin, DetailView):
+    model = Venda
+    template_name = 'detalhes/pdf_venda.html'
+
 ######################## VENDA ####################################
 
 
@@ -44,6 +96,7 @@ class ProdutoCreateView(CreateView):
     fields = '__all__'
 
     def get_success_url(self):
+        messages.success(self.request, 'Produto cadastrado com suceso!')
         return reverse_lazy('cadastrar_produto')
 
 
@@ -72,6 +125,7 @@ class EntregaProdutoCreateView(CreateView):
     fields = '__all__'
 
     def get_success_url(self):
+        messages.success(self.request, 'entrega cadastrada com suceso!')
         return reverse_lazy('cadastrar_entrega_produto')
 
 
@@ -100,6 +154,7 @@ class ClienteCreateView(CreateView):
     fields = '__all__'
 
     def get_success_url(self):
+        messages.success(self.request, 'Cliente cadastrado com suceso!')
         return reverse_lazy('cadastrar_cliente')
 
 
@@ -120,34 +175,6 @@ class  ClienteUpdateView(UpdateView):
 
 ####################### CLIENTE ###################################
 
-####################### CLIENTE PEGUE-LEVE  ###################################
-
-class ClientePegueLeveCreateView(CreateView):
-    model = ClientePegueLeve
-    template_name = 'cadastrar/clientepegueleve.html'
-    fields = '__all__'
-
-    def get_success_url(self):
-        return reverse_lazy('cadastrar_clientepegueleve')
-
-
-class ClientePegueLeveListView(ListView):
-    model = ClientePegueLeve
-    template_name = 'listar/clientepegueleve.html'
-    paginate_by = 5
-
-
-class ClientePegueLeveUpdateView(UpdateView):
-    model = ClientePegueLeve
-    template_name = 'atualizar/clientepegueleve.html'
-
-    fields = '__all__'
-
-    def get_success_url(self):
-        return reverse_lazy('listar_clientepegueleve')
-
-####################### CLIENTE PEGUE-LEVE ###################################
-
 ####################### FORNECEDOR  ###################################
 
 class CadastroFornecedorCreateView(CreateView):
@@ -156,6 +183,7 @@ class CadastroFornecedorCreateView(CreateView):
     fields = '__all__'
 
     def get_success_url(self):
+        messages.success(self.request, 'Fornecedor cadastrado com suceso!')
         return reverse_lazy('cadastrar_fornecedor')
 
 
@@ -180,28 +208,29 @@ class CadastroFornecedorUpdateView(UpdateView):
 
 class FormasPagamentoCreateView(CreateView):
     model = FormasPagamento
-    template_name = 'cadastrar/venda.html'
+    template_name = 'cadastrar/formaspagamento.html'
 
     fields = '__all__'
 
     def get_success_url(self):
-        return reverse_lazy("listar_venda")
+        messages.success(self.request, 'Formas de pagamento cadastradas com suceso!')
+        return reverse_lazy("listar_formaspagamento")
 
 
 class FormasPagamentoListView(ListView):
     model = FormasPagamento
-    template_name = 'listar/venda.html'
+    template_name = 'listar/formaspagamento.html'
     paginate_by = 5
 
 
 class FormasPagamentoUpdateView(UpdateView):
     model = FormasPagamento
-    template_name = 'atualizar/venda.html'
+    template_name = 'atualizar/formaspagamento.html'
 
     fields = '__all__'
 
     def get_success_url(self):
-        return reverse_lazy('listar_venda')
+        return reverse_lazy('listar_formaspagamento')
 
 ######################## FormasPagamento ####################################
 
@@ -209,87 +238,90 @@ class FormasPagamentoUpdateView(UpdateView):
 
 class CadastroAtendenteCreateView(CreateView):
     model = CadastroAtendente
-    template_name = 'cadastrar/venda.html'
+    template_name = 'cadastrar/atendente.html'
 
     fields = '__all__'
 
     def get_success_url(self):
-        return reverse_lazy("listar_venda")
+        messages.success(self.request, 'Atendente cadastrado com suceso!')
+        return reverse_lazy("listar_atendente")
 
 
 class CadastroAtendenteListView(ListView):
     model = CadastroAtendente
-    template_name = 'listar/venda.html'
+    template_name = 'listar/atendente.html'
     paginate_by = 5
 
 
 class CadastroAtendenteUpdateView(UpdateView):
     model = CadastroAtendente
-    template_name = 'atualizar/venda.html'
+    template_name = 'atualizar/atendente.html'
 
     fields = '__all__'
 
     def get_success_url(self):
-        return reverse_lazy('listar_venda')
+        return reverse_lazy('listar_atendente')
 
 ######################## CadastroAtendente ####################################
 
 
-######################## CadastroLocalDeEntrega ####################################
+######################## RegistroCupom ####################################
 
 class CadastroLocalDeEntregaCreateView(CreateView):
-    model = CadastroLocalDeEntrega
-    template_name = 'cadastrar/venda.html'
+    model = RegistroCupom
+    template_name = 'cadastrar/registrocupom.html'
 
     fields = '__all__'
 
     def get_success_url(self):
-        return reverse_lazy("listar_venda")
+        messages.success(self.request, 'Cupom cadastrado com suceso!')
+        return reverse_lazy('listar_registrocupom')
 
 
 class CadastroLocalDeEntregaListView(ListView):
-    model = CadastroLocalDeEntrega
-    template_name = 'listar/venda.html'
+    model = RegistroCupom
+    template_name = 'listar/registrocupom.html'
     paginate_by = 5
 
 
 class CadastroLocalDeEntregaUpdateView(UpdateView):
-    model = CadastroLocalDeEntrega
-    template_name = 'atualizar/venda.html'
+    model = RegistroCupom
+    template_name = 'atualizar/registrocupom.html'
 
     fields = '__all__'
 
     def get_success_url(self):
-        return reverse_lazy('listar_venda')
+        return reverse_lazy('listar_registrocupom')
 
-######################## CadastroLocalDeEntrega ####################################
+######################## RegistroCupom ####################################
 
 ######################## CadastroRestaurante ####################################
 
 class CadastroRestauranteCreateView(CreateView):
     model = CadastroRestaurante
-    template_name = 'cadastrar/venda.html'
+    template_name = 'cadastrar/restaurante.html'
 
     fields = '__all__'
 
     def get_success_url(self):
-        return reverse_lazy("listar_venda")
+        messages.success(self.request, 'Restaurante cadastrado com suceso!')
+        return reverse_lazy("listar_restaurante")
 
 
 class CadastroRestauranteListView(ListView):
     model = CadastroRestaurante
-    template_name = 'listar/venda.html'
+    template_name = 'listar/restaurante.html'
     paginate_by = 5
 
 
 class CadastroRestauranteUpdateView(UpdateView):
     model = CadastroRestaurante
-    template_name = 'atualizar/venda.html'
+    template_name = 'atualizar/restaurante.html'
 
     fields = '__all__'
 
     def get_success_url(self):
-        return reverse_lazy('listar_venda')
+        return reverse_lazy('listar_restaurante')
 
 ######################## CadastroRestaurante ####################################
 
@@ -297,28 +329,29 @@ class CadastroRestauranteUpdateView(UpdateView):
 
 class FazerPedidoCreateView(CreateView):
     model = FazerPedido
-    template_name = 'cadastrar/venda.html'
+    template_name = 'cadastrar/pedido.html'
 
     fields = '__all__'
 
     def get_success_url(self):
-        return reverse_lazy("listar_venda")
+        messages.success(self.request, 'Pedido feito com suceso!')
+        return reverse_lazy("listar_pedido")
 
 
 class FazerPedidoListView(ListView):
     model = FazerPedido
-    template_name = 'listar/venda.html'
+    template_name = 'listar/pedido.html'
     paginate_by = 5
 
 
 class FazerPedidoUpdateView(UpdateView):
     model = FazerPedido
-    template_name = 'atualizar/venda.html'
+    template_name = 'atualizar/pedido.html'
 
     fields = '__all__'
 
     def get_success_url(self):
-        return reverse_lazy('listar_venda')
+        return reverse_lazy('listar_pedido')
 
 ######################## FazerPedido ####################################
 

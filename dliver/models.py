@@ -12,27 +12,31 @@ class Venda(models.Model):
     nome = models.CharField(max_length=255, null=False, blank=False, verbose_name='Nome da Venda')
     valor = models.DecimalField(max_digits=12, decimal_places=2, null=False, blank=False,
                                 verbose_name='Valor total da venda')
-    data_hora_venda = models.DateTimeField(auto_now_add=True, blank=True, null=False)
+    data_hora_venda = models.DateTimeField(auto_now_add=False, blank=True, null=False)
     numero_venda = models.IntegerField(blank=False, null=False, verbose_name='Número da Venda')
-    observacao = models.TextField(blank=True, null=True, verbose_name="Observação")
     comprovante_venda = models.FileField(upload_to='comprovante_venda/', verbose_name='Comprovante de Venda')
-    venda_concluida = models.BooleanField(blank=False, null=False)
+    venda_concluida = models.BooleanField(blank=False, null=False, default=True)
     qtd_itens = models.IntegerField(blank=True, null=False, default=0, verbose_name='Quantidade de Itens Vendidos')
     descricao_pedido = models.ManyToManyField('FazerPedido', verbose_name='Produtos Pedidos')
     cliente = models.ForeignKey('Cliente', on_delete=models.DO_NOTHING, default=1, verbose_name='Cliente')
+    observacao = models.TextField(blank=True, null=True, verbose_name="Observação")
+    novo_item = models.IntegerField(blank=False, null=False)
+    excluido = models.BooleanField(blank=True, null=False, default=False)
 
     def __str__(self):
         return str(self.pk) + ' | ' + str(self.nome) + ' | ' + str(self.numero_venda)
 
 
 class Produto(models.Model):
-    nome = models.CharField(max_length=255, blank=False, null=False)
-    valor = models.DecimalField(max_digits=12, decimal_places=2, null=False, blank=False)
-    tamanho = models.CharField(max_length=10, blank=False, null=False)
-    fornecedor = models.ForeignKey('CadastroFornecedor', on_delete=models.DO_NOTHING, default=1)
-    quantidade = models.CharField(max_length=10, blank=False, null=False)
-    nacionalidade_do_produto = models.CharField(max_length=10, blank=False, null=False)
-    observacao = models.CharField(max_length=10, blank=True, null=True)
+    nome = models.CharField(max_length=255, blank=False, null=False, verbose_name='Nome')
+    valor = models.DecimalField(max_digits=12, decimal_places=2, null=False, blank=False, verbose_name='Valor')
+    tamanho = models.CharField(max_length=10, blank=False, null=False, verbose_name='Tamanho')
+    fornecedor = models.ForeignKey('CadastroFornecedor', on_delete=models.DO_NOTHING, default=1,
+                                   verbose_name='Fornecedor')
+    quantidade = models.CharField(max_length=10, blank=False, null=False, verbose_name='Quantidade')
+    nacionalidade_do_produto = models.CharField(max_length=10, blank=False, null=False,
+                                                verbose_name='Nacionalidade do Produto')
+    observacao = models.CharField(max_length=10, blank=True, null=True, verbose_name='Observação')
 
     def __str__(self):
         return str(self.nome) + '| R$: ' + str(self.valor) + '|' + str(self.tamanho)
@@ -41,13 +45,14 @@ class Produto(models.Model):
 class FormasPagamento(models.Model):
     nome_restaurante = models.ForeignKey('CadastroRestaurante', on_delete=models.DO_NOTHING, default=1,
                                          verbose_name='Nome do Restaurante')
-    nome_cliente = models.ForeignKey('Cliente', on_delete=models.DO_NOTHING, default=1, verbose_name='Nome do Cliente')
-    pix = models.BooleanField(blank=False, null=False)
-    cartao_de_credito = models.BooleanField(blank=False, null=False)
-    cartao_de_debito = models.BooleanField(blank=False, null=False)
-    criptomoeda = models.BooleanField(blank=False, null=False)
-    aplicativo_pagamento = models.BooleanField(blank=False, null=False)
-    pontos_pagamento = models.BooleanField(blank=False, null=False)
+    pix = models.CharField(max_length=255, blank=False, null=False, verbose_name='Chave Pix')
+    cartoes_de_credito = models.CharField(max_length=255, blank=False, null=False, verbose_name='Cartões de Crédito')
+    cartoes_de_debito = models.CharField(max_length=255, blank=False, null=False, verbose_name='Cartões de Débito')
+    criptomoeda = models.CharField(max_length=255, blank=False, null=False, verbose_name='Criptomoeda')
+    app_pagamento = models.CharField(max_length=255, blank=False, null=False,
+                                            verbose_name='Aplicativo de Pagamento')
+    app_pontos = models.CharField(max_length=255, blank=False, null=False,
+                                  verbose_name='Aplicativo de Pontos')
 
     # lista = [cartao_de_debito, cartao_de_debito, criptomoeda, aplicativo_pagamento, pontos_pagamento]
 
@@ -59,7 +64,9 @@ class FormasPagamento(models.Model):
     #         else:
     #             return False
     def __str__(self):
-        return str(self.pk) + ' - ' + str(self.nome_restaurante)
+        return str(self.pk) + ' - ' + str(self.nome_restaurante) + ' - ' + str(self.pix) + ' - ' + \
+               str(self.cartoes_de_credito) + ' - ' + str(self.cartoes_de_debito) + ' - ' + \
+               str(self.criptomoeda) + ' - ' + str(self.app_pagamento) + ' - ' + str(self.app_pontos)
 
     # apagar depois de feito a classe Categoria
 
@@ -143,9 +150,10 @@ class CadastroFornecedor(models.Model):
     endereco = models.CharField(max_length=200, verbose_name='Endereço do Restaurante')
     cep = models.CharField(max_length=50, null=False, blank=False, verbose_name='CEP')
     cnpj = models.CharField(max_length=14, blank=False, null=False, verbose_name='CNPJ')
-    ramo_atuacao = models.CharField(max_length=128, verbose_name='Ramo do Fornecedor', default=5)
+    ramo_atuacao = models.CharField(max_length=128, verbose_name='Ramo de Atuação')
     email_do_fornecedor = models.EmailField(blank=False, null=True, verbose_name='E-mail do Fornecedor')
-    empresa_fornecida = models.ForeignKey('CadastroRestaurante', on_delete=models.DO_NOTHING)
+    empresa_fornecida = models.ForeignKey('CadastroRestaurante', on_delete=models.DO_NOTHING,
+                                          verbose_name='Empresa Fornecida')
     telefone = models.CharField(max_length=12, blank=False, null=False, verbose_name='Telefone')
     observacao = models.TextField(blank=True, null=True, verbose_name="Observação")
 
@@ -180,7 +188,7 @@ class Cliente(models.Model):
     data_de_nascimento = forms.DateField()
     cidade = models.CharField(max_length=50, blank=False, null=True, verbose_name='Cidade')
     cep = models.CharField(max_length=8, blank=False, null=True, verbose_name='CEP')
-    email_Cliente = models.EmailField(blank=False, null=True, verbose_name='E-mail')
+    email_cliente = models.EmailField(blank=False, null=True, verbose_name='E-mail')
     tel = models.CharField(max_length=12, blank=False, null=True, verbose_name='Telefone')
     observacao = models.TextField(blank=True, null=True, verbose_name="Observação")
 
@@ -247,4 +255,17 @@ class ClientePegueLeve(models.Model):
     def __str__(self):
         return str(self.nome)
 
-    # FAZER CLASSE REGISTRO CUPOM
+
+class RegistroCupom(models.Model):
+    titulo_cupom = models.CharField(max_length=255, blank=False, null=False, verbose_name='Título do Cupom')
+    codigo_promocional = models.CharField(max_length=255, blank=False, null=False, verbose_name='Código Promocional')
+    # CATEGORIA_CHOICES = (('A','A'),('A','A'))
+    # categoria_cupons = models.ForeignObject(Produto,on_delete=models.DO_NOTHING())
+    categoria_produto_cupons = models.CharField(max_length=255, blank=False, null=False,
+                                                verbose_name='Categoria de Cupom')
+    nome_empresa_cupom = models.ForeignKey('CadastroRestaurante', on_delete=models.DO_NOTHING, default=1)
+    cliente = models.ForeignKey('Cliente', on_delete=models.DO_NOTHING, default=1)
+    validade_cupom = models.DateField(verbose_name='Validade do Cupom')
+    parceiro_cupom = models.CharField(max_length=255, blank=False, null=False, verbose_name='Nome do Parceiro')
+    link_cupom = models.URLField(verbose_name='Link')
+    observacao = models.TextField(blank=True, null=True, verbose_name="Observação")

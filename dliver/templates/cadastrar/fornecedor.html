@@ -1,10 +1,11 @@
 {% extends 'adminlte/base.html' %}
 {% load bootstrap %}
 {% block content  %}
-    <h1>Fornecedor</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form|bootstrap }}
-        <input type="submit" value="Cadastrar">
-    </form>
+<h1>Cadastro Fornecedor</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form|bootstrap }}
+    <a class="btn btn-warning" href="{% url 'listar_fornecedor' %}">Voltar</a>
+    <input class="btn btn-success" type="submit" value="Cadastrar">
+</form>
 {% endblock %}
