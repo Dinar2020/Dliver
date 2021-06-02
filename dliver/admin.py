@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from .models import Venda, Cliente, CadastroAtendente, CadastroRestaurante,\
     ClientePegueLeve, Bebida, Hamburguer, Pizza, Passaporte, Pastel, FazerPedido, EntregaProduto,\
-    FormasPagamento, CadastroFornecedor, CadastroLocalDeEntrega
+    FormasPagamento, CadastroFornecedor, CadastroLocalDeEntrega, RegistroCupom, Produto
 
 # Register your models here.
 
@@ -21,5 +21,9 @@ admin.site.register(EntregaProduto)
 admin.site.register(FormasPagamento)
 admin.site.register(CadastroFornecedor)
 admin.site.register(CadastroLocalDeEntrega)
+admin.site.register(RegistroCupom)
+admin.site.register(Produto)
+
+
 
 

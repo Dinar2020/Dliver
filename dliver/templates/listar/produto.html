@@ -1,31 +1,50 @@
 {% extends 'adminlte/base.html' %}
-{% block content %}
-    <h1>Página de listagem de Produtos</h1>
-    <a href="{% url 'cadastrar_produto' %}">CADASTRAR PRODUTO</a>
 
-    <table>
+{% block content %}
+    <h1>Página de listagem de venda</h1>
+    <a class="btn btn-success" href="{% url 'cadastrar_produto' %}"><i class="fa fa-plus"></i> CADASTRAR VENDA</a>
+
+    <table class="table table-striped">
         <thead>
             <th>ID</th>
             <th>NOME</th>
+            <th>VALOR</th>
             <th>TAMANHO</th>
             <th>FORNECEDOR</th>
             <th>QUANTIDADE</th>
             <th>NACIONALIDADE</th>
+            <th>OBSERVAÇÃO</th>
+
         </thead>
         <tbody>
     {% for obj_produto in object_list %}
             <tr>
                 <td>{{obj_produto.pk}}</td>
-                <td>{{obj_produto.nome}}</td>
+                {% if obj_produto.nome|length > 30 %}
+                <td>{{obj_produto.nome|slice:":30"}}...</td>
+                {% else %}
+                <td>{{obj_produto.nome|slice:":30"}}</td>
+                {% endif %}
                 <td>{{obj_produto.valor}}</td>
                 <td>{{obj_produto.tamanho}}</td>
                 <td>{{obj_produto.fornecedor}}</td>
                 <td>{{obj_produto.quantidade}}</td>
-                <td>{{obj_produto.nacionalidade_do_produto}}</td>
-                <td><a href="{% url 'atualizar_produto' obj_produto.pk %}">ATUALIZAR</a></td>
+                <td>{{obj_produto.nacionalidade}}</td>
+                <td>{{obj_produto.observacao}}</td>
+
+                <td>
+                    <a href="{% url 'corrigir_produto' obj_produto.pk %}"><i class="fa fa-edit" rel="tooltip" title="Editar Produto"></i></a>
+                    <a href="{% url 'atualizar_observacao_produto' obj_produto.pk %}"><i class="fa fa-edit"  rel="tooltip" title="Editar Observação"></i></a>
+                    <a href="{% url 'atualizar_cliente_produto' obj_produto.pk %}"><i class="fa fa-edit"  rel="tooltip" title="Editar Cliente do Produto"></i></a>
+                    {% if obj_produto.excluido is False %}
+                    <a class="desabilitar-produto" data-url="{% url 'ajax_desabilitar_produto' obj_produto.pk %}" href="#"><i class="fa fa-times" rel="tooltip" title="Desabilitar Produto"></i></a>
+                    {% else %}
+                    <a class="habilitar-produto" data-url="{% url 'ajax_habilitar_produto' obj_produto.pk %}" href="#"><i class="fa fa-check" rel="tooltip" title="Habilitar Produto"></i></a>
+                    {% endif %}
+                </td>
             </tr>
     {% empty %}
-        <h3>Desculpe, você ainda nao possui produtos cadastrados em seu sistema.
+        <h3>Desculpe, você ainda nao possui vendas cadastradas em seu sistema.
             <br/>:'(</h3>
     {% endfor %}
         </tbody>
@@ -35,8 +54,8 @@
         <div class="pagination">
             <span class="step-links">
                 {% if page_obj.has_previous %}
-                    <a href="?page=1">&laquo; Primeira Página |</a>
-                    <a href="?page={{ page_obj.previous_page_number }}">Página Anterior </a>
+                    <a class="btn btn-default" href="?page=1">&laquo; Primeira Página </a>
+                <a class="btn btn-primary" href="?page={{ page_obj.previous_page_number }}"><i class="fa fa-arrow-left"></i> Página Anterior </a>
                 {% endif %}
 
                 <span class="current">
@@ -44,10 +63,93 @@
                 </span>
 
                 {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}">Próxima Página</a>
-                    <a href="?page={{ page_obj.paginator.num_pages }}">| Última Página &raquo;</a>
+                    <a class="btn btn-primary" href="?page={{ page_obj.next_page_number }}">Próxima Página <i class="fa fa-arrow-right"></i></a>
+                    <a class="btn btn-default" href="?page={{ page_obj.paginator.num_pages }}">| Última Página &raquo;</a>
                 {% endif %}
             </span>
         </div>
     {% endif %}
+{% endblock %}
+
+
+{% block javascript %}
+{% include 'adminlte/lib/_scripts.html' %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Vai ser executado apenas após a página estar pronta. Ou seja, carregada.
+
+            // Clicando no ícone de desabilitar
+            $(".desabilitar_produto").click(function() {
+                //Capturando o valor da propriedate "data-url" que está na tag do ícone com a classe "desabilitar-venda"
+                var url = $(this).attr('data-url');
+
+                //Abrindo o nosso modal (popup) do SweetAlert com as opções de "confirmação de açao" e "cancelar ação"
+                swal({
+                  title: "Desabilitar Venda",
+                  text: "Tem certeza que deseja desabilitar este produto?",
+                  icon: "warning",
+                  buttons: true,
+                  dangerMode: true,
+                })
+                .then((willDelete) => {
+                  if (willDelete) {
+
+                    //Se clicar na ação de confirmar a deleção, irá iniciar o AJAX
+                    $.ajax({
+                        url: url,
+                        success: function (data) {
+
+                            //No sucesso do AJAX, irá exibir uma modal com SweetAlert informando que a desabilitação foi realizada com sucesso
+                            swal("Produto desabilitada com sucesso!", {
+                              icon: "success",
+                              timer: 3000
+                            });
+
+                            //Recarregando a página
+                            location.reload();
+                        }
+                    });
+
+                  } else {
+
+                    //Exibindo o SweetAlert caso o usuário cancele a ação
+                    swal("Ação cancelada...");
+                  }
+                });
+            });
+
+            //Clicando no ícone de habilitar
+            $(".habilitar_produto").click(function() {
+                var url = $(this).attr('data-url');
+                swal({
+                  title: "Habilitar Venda",
+                  text: "Tem certeza que deseja habilitar este produto?",
+                  icon: "warning",
+                  buttons: true,
+                  dangerMode: true,
+                })
+                .then((willDelete) => {
+                  if (willDelete) {
+                    $.ajax({
+                        url: url,
+                        success: function (data) {
+                            swal("Produto habilitado com sucesso!", {
+                              icon: "success",
+                              timer: 3000
+                            });
+                            location.reload();
+                        }
+                    });
+
+                  } else {
+                    swal("Ação cancelada...");
+                  }
+                });
+            });
+
+        });
+    </script>
+
 {% endblock %}

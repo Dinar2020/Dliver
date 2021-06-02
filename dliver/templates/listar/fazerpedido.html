@@ -1,45 +1,47 @@
 {% extends 'adminlte/base.html' %}
 
 {% block content %}
-    <h1>Página de listagem de venda</h1>
-    <a class="btn btn-success" href="{% url 'cadastrar_venda' %}"><i class="fa fa-plus"></i> CADASTRAR VENDA</a>
+    <h1>Página de listagem de atendente</h1>
+    <a class="btn btn-success" href="{% url 'cadastrar_pedido' %}"><i class="fa fa-plus"></i> CADASTRAR ATENDENTE</a>
 
     <table class="table table-striped">
         <thead>
             <th>ID</th>
-            <th>NOME</th>
-            <th>VALOR</th>
-            <th>DATA DA VENDA</th>
-            <th>CLIENTE</th>
-            <th>RECIBO</th>
-            <th>AÇÕES</th>
+            <th>NOME DO CLIENTE</th>
+            <th>BEBIDA</th>
+            <th>HAMBURGUER</th>
+            <th>PIZZA</th>
+            <th>PASSAPORTE</th>
+            <th>PASTEL</th>
+            <th>LOCAL DE ENTREGA</th>
+            <th>OBSERVAÇÃO</th>
+
         </thead>
         <tbody>
-    {% for obj_venda in object_list %}
+    {% for obj_pedido in object_list %}
             <tr>
-                <td>{{obj_venda.pk}}</td>
-                {% if obj_venda.nome|length > 30 %}
-                <td>{{obj_venda.nome|slice:":30"}}...</td>
+                <td>{{obj_pedido.pk}}</td>
+                {% if obj_pedido.nome_cliente|length > 30 %}
+                <td>{{obj_pedido.nome_cliente|slice:":30"}}...</td>
                 {% else %}
-                <td>{{obj_venda.nome|slice:":30"}}</td>
+                <td>{{obj_pedido.nome_cliente|slice:":30"}}</td>
                 {% endif %}
-                <td>{{obj_venda.valor}}</td>
-                <td>{{obj_venda.data_venda}}</td>
-                <td>{{obj_venda.cliente}}</td>
+                <td>{{obj_pedido.bebida}}</td>
+                <td>{{obj_pedido.hamburguer}}</td>
+                <td>{{obj_pedido.pizza}}</td>
+                <td>{{obj_pedido.passaporte}}</td>
+                <td>{{obj_pedido.pastel}}</td>
+                <td>{{obj_pedido.local_de_entrega}}</td>
+                <td>{{obj_pedido.observacao}}</td>
+
                 <td>
-                    <center>
-                        <a target="_blank" href="{% url 'pdf_venda' obj_venda.pk %}"><i class="fa fa-file-pdf" rel="tooltip" title="Visualizar Recibo"></i> </a>
-                    </center>
-                </td>
-                <td>
-                    <a href="{% url 'detalhes_venda' obj_venda.pk %}"><i class="fa fa-search" rel="tooltip" title="Ver detalhes da venda"></i> </a>
-                    <a href="{% url 'corrigir_venda' obj_venda.pk %}"><i class="fa fa-edit" rel="tooltip" title="Editar Venda"></i></a>
-                    <a href="{% url 'atualizar_observacao_venda' obj_venda.pk %}"><i class="fa fa-edit"  rel="tooltip" title="Editar Observação"></i></a>
-                    <a href="{% url 'atualizar_cliente_venda' obj_venda.pk %}"><i class="fa fa-edit"  rel="tooltip" title="Editar Cliente da Venda"></i></a>
-                    {% if obj_venda.excluido is False %}
-                    <a class="desabilitar_venda" data-url="{% url 'ajax_desabilitar_venda' obj_venda.pk %}" href="#"><i class="fa fa-times" rel="tooltip" title="Desabilitar Venda"></i></a>
+                    <a href="{% url 'corrigir_pedido' obj_pedido.pk %}"><i class="fa fa-edit" rel="tooltip" title="Editar Pedido"></i></a>
+                    <a href="{% url 'atualizar_local_de_entrega_pedido' obj_pedido.pk %}"><i class="fa fa-edit"  rel="tooltip" title="Editar Local de Entrega"></i></a>
+                    <a href="{% url 'atualizar_cliente_pedido' obj_pedido.pk %}"><i class="fa fa-edit"  rel="tooltip" title="Editar Cliente "></i></a>
+                    {% if obj_pedido.excluido is False %}
+                    <a class="desabilitar_pedido" data-url="{% url 'ajax_desabilitar_pedido' obj_pedido.pk %}" href="#"><i class="fa fa-times" rel="tooltip" title="Desabilitar Pedido"></i></a>
                     {% else %}
-                    <a class="habilitar_venda" data-url="{% url 'ajax_habilitar_venda' obj_venda.pk %}" href="#"><i class="fa fa-check" rel="tooltip" title="Habilitar Venda"></i></a>
+                    <a class="habilitar_pedido" data-url="{% url 'ajax_habilitar_pedido' obj_pedido.pk %}" href="#"><i class="fa fa-check" rel="tooltip" title="Habilitar Pedido"></i></a>
                     {% endif %}
                 </td>
             </tr>
@@ -81,14 +83,14 @@
             // Vai ser executado apenas após a página estar pronta. Ou seja, carregada.
 
             // Clicando no ícone de desabilitar
-            $(".desabilitar_venda").click(function() {
+            $(".desabilitar_pedido").click(function() {
                 //Capturando o valor da propriedate "data-url" que está na tag do ícone com a classe "desabilitar-venda"
                 var url = $(this).attr('data-url');
 
                 //Abrindo o nosso modal (popup) do SweetAlert com as opções de "confirmação de açao" e "cancelar ação"
                 swal({
-                  title: "Desabilitar Venda",
-                  text: "Tem certeza que deseja desabilitar esta venda?",
+                  title: "Desabilitar Pedido",
+                  text: "Tem certeza que deseja desabilitar este pedido?",
                   icon: "warning",
                   buttons: true,
                   dangerMode: true,
@@ -102,7 +104,7 @@
                         success: function (data) {
 
                             //No sucesso do AJAX, irá exibir uma modal com SweetAlert informando que a desabilitação foi realizada com sucesso
-                            swal("Venda desabilitada com sucesso!", {
+                            swal("Pedido desabilitado com sucesso!", {
                               icon: "success",
                               timer: 3000
                             });
@@ -121,11 +123,11 @@
             });
 
             //Clicando no ícone de habilitar
-            $(".habilitar_venda").click(function() {
+            $(".habilitar-venda").click(function() {
                 var url = $(this).attr('data-url');
                 swal({
-                  title: "Habilitar Venda",
-                  text: "Tem certeza que deseja habilitar esta venda?",
+                  title: "Habilitar Pedido",
+                  text: "Tem certeza que deseja habilitar este pedido?",
                   icon: "warning",
                   buttons: true,
                   dangerMode: true,
@@ -135,7 +137,7 @@
                     $.ajax({
                         url: url,
                         success: function (data) {
-                            swal("Venda habilitada com sucesso!", {
+                            swal("Pedido habilitado com sucesso!", {
                               icon: "success",
                               timer: 3000
                             });

@@ -2,14 +2,15 @@
 
 {% block content %}
     <h1>Página de listagem de venda</h1>
-    <a class="btn btn-success" href="{% url 'cadastrar_venda' %}"><i class="fa fa-plus"></i> CADASTRAR VENDA</a>
+    <a class="btn btn-success" href="{% url 'cadastrar_registrocupom' %}"><i class="fa fa-plus"></i> CADASTRAR VENDA</a>
 
     <table class="table table-striped">
         <thead>
             <th>ID</th>
+            <th>TITULO DO CUPOM</th>
+            <th>CÓDIGO PROMOCIONAL</th>
+            <th>CATEGORIA DE CUPOM</th>
             <th>NOME</th>
-            <th>VALOR</th>
-            <th>DATA DA VENDA</th>
             <th>CLIENTE</th>
             <th>RECIBO</th>
             <th>AÇÕES</th>
@@ -17,29 +18,28 @@
         <tbody>
     {% for obj_venda in object_list %}
             <tr>
-                <td>{{obj_venda.pk}}</td>
-                {% if obj_venda.nome|length > 30 %}
-                <td>{{obj_venda.nome|slice:":30"}}...</td>
+                <td>{{obj_registrocupom.titulo_cupom}}</td>
+                {% if obj_registrocupom.nome|length > 30 %}
+                <td>{{obj_registrocupom.nome|slice:":30"}}...</td>
                 {% else %}
-                <td>{{obj_venda.nome|slice:":30"}}</td>
+                <td>{{obj_registrocupom.nome|slice:":30"}}</td>
                 {% endif %}
-                <td>{{obj_venda.valor}}</td>
-                <td>{{obj_venda.data_venda}}</td>
-                <td>{{obj_venda.cliente}}</td>
+                <td>{{obj_registrocupom.codigo_promocional}}</td>
+                <td>{{obj_registrocupom.nome_empresa_cupom}}</td>
+                <td>{{obj_registrocupom.cliente}}</td>
+                <td>{{obj_registrocupom.validade_cupom}}</td>
+                <td>{{obj_registrocupom.parceiro_cupom}}</td>
+                <td>{{obj_registrocupom.link_cupom}}</td>
+                <td>{{obj_registrocupom.observacao}}</td>
+
                 <td>
-                    <center>
-                        <a target="_blank" href="{% url 'pdf_venda' obj_venda.pk %}"><i class="fa fa-file-pdf" rel="tooltip" title="Visualizar Recibo"></i> </a>
-                    </center>
-                </td>
-                <td>
-                    <a href="{% url 'detalhes_venda' obj_venda.pk %}"><i class="fa fa-search" rel="tooltip" title="Ver detalhes da venda"></i> </a>
-                    <a href="{% url 'corrigir_venda' obj_venda.pk %}"><i class="fa fa-edit" rel="tooltip" title="Editar Venda"></i></a>
-                    <a href="{% url 'atualizar_observacao_venda' obj_venda.pk %}"><i class="fa fa-edit"  rel="tooltip" title="Editar Observação"></i></a>
-                    <a href="{% url 'atualizar_cliente_venda' obj_venda.pk %}"><i class="fa fa-edit"  rel="tooltip" title="Editar Cliente da Venda"></i></a>
+                    <a href="{% url 'corrigir_registrocupom' obj_registrocupom.pk %}"><i class="fa fa-edit" rel="tooltip" title="Editar Registro de Cupom"></i></a>
+                    <a href="{% url 'atualizar_cliente-registrocupom' obj_registrocupom.pk %}"><i class="fa fa-edit"  rel="tooltip" title="Editar Cliente"></i></a>
+                    <a href="{% url 'atualizar_validade_registrocupom' obj_registrocupom.pk %}"><i class="fa fa-edit"  rel="tooltip" title="Editar Validade"></i></a>
                     {% if obj_venda.excluido is False %}
-                    <a class="desabilitar_venda" data-url="{% url 'ajax_desabilitar_venda' obj_venda.pk %}" href="#"><i class="fa fa-times" rel="tooltip" title="Desabilitar Venda"></i></a>
+                    <a class="desabilitar_registrocupom" data-url="{% url 'ajax_desabilitar_registrocupom' obj_registrocupom.pk %}" href="#"><i class="fa fa-times" rel="tooltip" title="Desabilitar Registro de Cupom"></i></a>
                     {% else %}
-                    <a class="habilitar_venda" data-url="{% url 'ajax_habilitar_venda' obj_venda.pk %}" href="#"><i class="fa fa-check" rel="tooltip" title="Habilitar Venda"></i></a>
+                    <a class="habilitar_registrocupom" data-url="{% url 'ajax_habilitar_registrocupom' obj_registrocupom.pk %}" href="#"><i class="fa fa-check" rel="tooltip" title="Habilitar Registro de Cupom"></i></a>
                     {% endif %}
                 </td>
             </tr>
@@ -81,14 +81,14 @@
             // Vai ser executado apenas após a página estar pronta. Ou seja, carregada.
 
             // Clicando no ícone de desabilitar
-            $(".desabilitar_venda").click(function() {
+            $(".desabilitar_registrocupom").click(function() {
                 //Capturando o valor da propriedate "data-url" que está na tag do ícone com a classe "desabilitar-venda"
                 var url = $(this).attr('data-url');
 
                 //Abrindo o nosso modal (popup) do SweetAlert com as opções de "confirmação de açao" e "cancelar ação"
                 swal({
-                  title: "Desabilitar Venda",
-                  text: "Tem certeza que deseja desabilitar esta venda?",
+                  title: "Desabilitar Registro de Cupom",
+                  text: "Tem certeza que deseja desabilitar este registro de cupom?",
                   icon: "warning",
                   buttons: true,
                   dangerMode: true,
@@ -102,7 +102,7 @@
                         success: function (data) {
 
                             //No sucesso do AJAX, irá exibir uma modal com SweetAlert informando que a desabilitação foi realizada com sucesso
-                            swal("Venda desabilitada com sucesso!", {
+                            swal("Registro de Cupom desabilitado com sucesso!", {
                               icon: "success",
                               timer: 3000
                             });
@@ -121,11 +121,11 @@
             });
 
             //Clicando no ícone de habilitar
-            $(".habilitar_venda").click(function() {
+            $(".habilitar_registrocupom").click(function() {
                 var url = $(this).attr('data-url');
                 swal({
-                  title: "Habilitar Venda",
-                  text: "Tem certeza que deseja habilitar esta venda?",
+                  title: "Habilitar Registro de Cupom",
+                  text: "Tem certeza que deseja habilitar este registro de cupom?",
                   icon: "warning",
                   buttons: true,
                   dangerMode: true,
@@ -135,7 +135,7 @@
                     $.ajax({
                         url: url,
                         success: function (data) {
-                            swal("Venda habilitada com sucesso!", {
+                            swal("Regsitro de Cupom habilitado com sucesso!", {
                               icon: "success",
                               timer: 3000
                             });

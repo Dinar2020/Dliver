@@ -1,35 +1,48 @@
 {% extends 'adminlte/base.html' %}
-{% block content %}
-    <h1>FORMAS DE PAGAMENTO</h1>
-    <a href="{% url 'cadastrar_formaspagamento' %}">CADASTRAR FORNECEDOR</a>
 
-    <table>
+{% block content %}
+    <h1>Página de listagem de venda</h1>
+    <a class="btn btn-success" href="{% url 'cadastrar_formaspagamento' %}"><i class="fa fa-plus"></i> CADASTRAR VENDA</a>
+
+    <table class="table table-striped">
         <thead>
+            <th>ID</th>
             <th>NOME DO RESTAURANTE</th>
-            <th>CHAVE PIX</th>
+            <th>PIX</th>
             <th>CARTÕES DE CRÉDITO</th>
             <th>CARTÕES DE DÉBITO</th>
-            <th>CRIPTOMOEDA</th>
-            <th>APLICATIVO DE PAGAMENTO</th>
-            <th>APLICATIVO DE PONTOS</th>
-
+            <th>RECIBO</th>
+            <th>AÇÕES</th>
         </thead>
         <tbody>
-    {% for obj_formaspagamento in object_list %}
+    {% for obj_fornecedor in object_list %}
             <tr>
                 <td>{{obj_formaspagamento.pk}}</td>
-                <td>{{obj_formaspagamento.nome_restaurante}}</td>
+                {% if obj_formaspagamento.restaurante|length > 30 %}
+                <td>{{obj_formaspagamento.restaurante|slice:":30"}}...</td>
+                {% else %}
+                <td>{{obj_formaspagamento.restaurante|slice:":30"}}</td>
+                {% endif %}
+                <td>{{obj_formaspagamento.pix}}</td>
                 <td>{{obj_formaspagamento.cartoes_de_credito}}</td>
                 <td>{{obj_formaspagamento.cartoes_de_debito}}</td>
                 <td>{{obj_formaspagamento.criptomoeda}}</td>
                 <td>{{obj_formaspagamento.app_pagamento}}</td>
                 <td>{{obj_formaspagamento.app_pontos}}</td>
 
-
-                <td><a href="{% url 'atualizar_formaspagamento' obj_formaspagamento.pk %}">ATUALIZAR</a></td>
+                <td>
+                    <a href="{% url 'corrigir_formaspagamento' obj_formaspagamento.pk %}"><i class="fa fa-edit" rel="tooltip" title="Editar Formas de Pagamento"></i></a>
+                    <a href="{% url 'atualizar_app_pagamento_formaspagamento' obj_formaspagamento.pk %}"><i class="fa fa-edit"  rel="tooltip" title="Editar Aplicativo de Pagamento"></i></a>
+                    <a href="{% url 'atualizar_nome_formaspagamento' obj_formaspagamento.pk %}"><i class="fa fa-edit"  rel="tooltip" title="Editar Restaurante"></i></a>
+                    {% if obj_venda.excluido is False %}
+                    <a class="desabilitar-formaspagamento" data-url="{% url 'ajax_desabilitar_formaspagamento' obj_formaspagamento.pk %}" href="#"><i class="fa fa-times" rel="tooltip" title="Desabilitar Formas de Pagamento"></i></a>
+                    {% else %}
+                    <a class="habilitar-formaspagamento" data-url="{% url 'ajax_habilitar_formaspagamento' obj_formaspagamento.pk %}" href="#"><i class="fa fa-check" rel="tooltip" title="Habilitar Formas de Pagamento"></i></a>
+                    {% endif %}
+                </td>
             </tr>
     {% empty %}
-        <h3>Desculpe, você ainda nao possui formas de pagamento cadastradas em seu sistema.
+        <h3>Desculpe, você ainda nao possui vendas cadastradas em seu sistema.
             <br/>:'(</h3>
     {% endfor %}
         </tbody>
@@ -39,8 +52,8 @@
         <div class="pagination">
             <span class="step-links">
                 {% if page_obj.has_previous %}
-                    <a href="?page=1">&laquo; Primeira Página |</a>
-                    <a href="?page={{ page_obj.previous_page_number }}">Página Anterior </a>
+                    <a class="btn btn-default" href="?page=1">&laquo; Primeira Página </a>
+                <a class="btn btn-primary" href="?page={{ page_obj.previous_page_number }}"><i class="fa fa-arrow-left"></i> Página Anterior </a>
                 {% endif %}
 
                 <span class="current">
@@ -48,10 +61,93 @@
                 </span>
 
                 {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}">Próxima Página</a>
-                    <a href="?page={{ page_obj.paginator.num_pages }}">| Última Página &raquo;</a>
+                    <a class="btn btn-primary" href="?page={{ page_obj.next_page_number }}">Próxima Página <i class="fa fa-arrow-right"></i></a>
+                    <a class="btn btn-default" href="?page={{ page_obj.paginator.num_pages }}">| Última Página &raquo;</a>
                 {% endif %}
             </span>
         </div>
     {% endif %}
+{% endblock %}
+
+
+{% block javascript %}
+{% include 'adminlte/lib/_scripts.html' %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Vai ser executado apenas após a página estar pronta. Ou seja, carregada.
+
+            // Clicando no ícone de desabilitar
+            $(".desabilitar_formaspagamento").click(function() {
+                //Capturando o valor da propriedate "data-url" que está na tag do ícone com a classe "desabilitar-venda"
+                var url = $(this).attr('data-url');
+
+                //Abrindo o nosso modal (popup) do SweetAlert com as opções de "confirmação de açao" e "cancelar ação"
+                swal({
+                  title: "Desabilitar Formas de Pagamento",
+                  text: "Tem certeza que deseja desabilitar esta venda?",
+                  icon: "warning",
+                  buttons: true,
+                  dangerMode: true,
+                })
+                .then((willDelete) => {
+                  if (willDelete) {
+
+                    //Se clicar na ação de confirmar a deleção, irá iniciar o AJAX
+                    $.ajax({
+                        url: url,
+                        success: function (data) {
+
+                            //No sucesso do AJAX, irá exibir uma modal com SweetAlert informando que a desabilitação foi realizada com sucesso
+                            swal("Formas de Pagamento desabilitada com sucesso!", {
+                              icon: "success",
+                              timer: 3000
+                            });
+
+                            //Recarregando a página
+                            location.reload();
+                        }
+                    });
+
+                  } else {
+
+                    //Exibindo o SweetAlert caso o usuário cancele a ação
+                    swal("Ação cancelada...");
+                  }
+                });
+            });
+
+            //Clicando no ícone de habilitar
+            $(".habilitar_formaspagamento").click(function() {
+                var url = $(this).attr('data-url');
+                swal({
+                  title: "Habilitar Venda",
+                  text: "Tem certeza que deseja habilitar esta venda?",
+                  icon: "warning",
+                  buttons: true,
+                  dangerMode: true,
+                })
+                .then((willDelete) => {
+                  if (willDelete) {
+                    $.ajax({
+                        url: url,
+                        success: function (data) {
+                            swal("Formas de pagamento habilitada com sucesso!", {
+                              icon: "success",
+                              timer: 3000
+                            });
+                            location.reload();
+                        }
+                    });
+
+                  } else {
+                    swal("Ação cancelada...");
+                  }
+                });
+            });
+
+        });
+    </script>
+
 {% endblock %}

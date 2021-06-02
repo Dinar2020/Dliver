@@ -1,27 +1,29 @@
 {% extends 'adminlte/base.html' %}
-{% block content %}
-    <h1>LISTAGEM DOS FORNECEDORES</h1>
-    <a href="{% url 'cadastrar_fornecedor' %}">CADASTRAR FORNECEDOR</a>
 
-    <table>
+{% block content %}
+    <h1>Página de listagem de venda</h1>
+    <a class="btn btn-success" href="{% url 'cadastrar_fornecedor' %}"><i class="fa fa-plus"></i> CADASTRAR VENDA</a>
+
+    <table class="table table-striped">
         <thead>
             <th>ID</th>
-            <th>NOME DA EMPRESA</th>
+            <th>NOME DO FORNECEDOR</th>
             <th>ENDEREÇO</th>
             <th>CEP</th>
             <th>CNPJ</th>
             <th>RAMO DE ATUAÇÃO</th>
-            <th>EMAIL DO FORNECEDOR</th>
             <th>EMPRESA FORNECIDA</th>
-            <th>TELEFONE</th>
-            <th>OBSERVAÇÃO</th>
         </thead>
         <tbody>
     {% for obj_fornecedor in object_list %}
             <tr>
                 <td>{{obj_fornecedor.pk}}</td>
-                <td>{{obj_fornecedor.nome_empresa}}</td>
-                <td>{{obj_fornecedor.endere}}</td>
+                {% if obj_fornecedor.nome|length > 30 %}
+                <td>{{obj_fornecedor.nome|slice:":30"}}...</td>
+                {% else %}
+                <td>{{obj_fornecedor.nome|slice:":30"}}</td>
+                {% endif %}
+                <td>{{obj_fornecedor.endereco}}</td>
                 <td>{{obj_fornecedor.cep}}</td>
                 <td>{{obj_fornecedor.cnpj}}</td>
                 <td>{{obj_fornecedor.ramo_atuacao}}</td>
@@ -30,10 +32,19 @@
                 <td>{{obj_fornecedor.telefone}}</td>
                 <td>{{obj_fornecedor.observacao}}</td>
 
-                <td><a href="{% url 'atualizar_fornecedor' obj_fornecedor.pk %}">ATUALIZAR</a></td>
+                <td>
+                    <a href="{% url 'corrigir_fornecedor' obj_fornecedor.pk %}"><i class="fa fa-edit" rel="tooltip" title="Editar Fornecedor"></i></a>
+                    <a href="{% url 'atualizar_nome_fornecedor' obj_fornecedor.pk %}"><i class="fa fa-edit"  rel="tooltip" title="Editar Nome do Fornecedor"></i></a>
+                    <a href="{% url 'atualizar_empresa_fornecida_fornecedor' obj_fornecedor.pk %}"><i class="fa fa-edit"  rel="tooltip" title="Editar Empresa Fornecida"></i></a>
+                    {% if obj_fornecedor.excluido is False %}
+                    <a class="desabilitar_fornecedor" data-url="{% url 'ajax_desabilitar_fornecedor' obj_fornecedor.pk %}" href="#"><i class="fa fa-times" rel="tooltip" title="Desabilitar Fornecedor"></i></a>
+                    {% else %}
+                    <a class="habilitar_fornecedor" data-url="{% url 'ajax_habilitar_fornecedor' obj_fornecedor.pk %}" href="#"><i class="fa fa-check" rel="tooltip" title="Habilitar Fornecedor"></i></a>
+                    {% endif %}
+                </td>
             </tr>
     {% empty %}
-        <h3>Desculpe, você ainda nao possui clientes cadastrados em seu sistema.
+        <h3>Desculpe, você ainda nao possui vendas cadastradas em seu sistema.
             <br/>:'(</h3>
     {% endfor %}
         </tbody>
@@ -43,8 +54,8 @@
         <div class="pagination">
             <span class="step-links">
                 {% if page_obj.has_previous %}
-                    <a href="?page=1">&laquo; Primeira Página |</a>
-                    <a href="?page={{ page_obj.previous_page_number }}">Página Anterior </a>
+                    <a class="btn btn-default" href="?page=1">&laquo; Primeira Página </a>
+                <a class="btn btn-primary" href="?page={{ page_obj.previous_page_number }}"><i class="fa fa-arrow-left"></i> Página Anterior </a>
                 {% endif %}
 
                 <span class="current">
@@ -52,10 +63,93 @@
                 </span>
 
                 {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}">Próxima Página</a>
-                    <a href="?page={{ page_obj.paginator.num_pages }}">| Última Página &raquo;</a>
+                    <a class="btn btn-primary" href="?page={{ page_obj.next_page_number }}">Próxima Página <i class="fa fa-arrow-right"></i></a>
+                    <a class="btn btn-default" href="?page={{ page_obj.paginator.num_pages }}">| Última Página &raquo;</a>
                 {% endif %}
             </span>
         </div>
     {% endif %}
+{% endblock %}
+
+
+{% block javascript %}
+{% include 'adminlte/lib/_scripts.html' %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Vai ser executado apenas após a página estar pronta. Ou seja, carregada.
+
+            // Clicando no ícone de desabilitar
+            $(".desabilitar_fornecedor").click(function() {
+                //Capturando o valor da propriedate "data-url" que está na tag do ícone com a classe "desabilitar-venda"
+                var url = $(this).attr('data-url');
+
+                //Abrindo o nosso modal (popup) do SweetAlert com as opções de "confirmação de açao" e "cancelar ação"
+                swal({
+                  title: "Desabilitar Fornecedor",
+                  text: "Tem certeza que deseja desabilitar este fornecedor?",
+                  icon: "warning",
+                  buttons: true,
+                  dangerMode: true,
+                })
+                .then((willDelete) => {
+                  if (willDelete) {
+
+                    //Se clicar na ação de confirmar a deleção, irá iniciar o AJAX
+                    $.ajax({
+                        url: url,
+                        success: function (data) {
+
+                            //No sucesso do AJAX, irá exibir uma modal com SweetAlert informando que a desabilitação foi realizada com sucesso
+                            swal("Forncedora desabilitado com sucesso!", {
+                              icon: "success",
+                              timer: 3000
+                            });
+
+                            //Recarregando a página
+                            location.reload();
+                        }
+                    });
+
+                  } else {
+
+                    //Exibindo o SweetAlert caso o usuário cancele a ação
+                    swal("Ação cancelada...");
+                  }
+                });
+            });
+
+            //Clicando no ícone de habilitar
+            $(".habilitar_fornecedor").click(function() {
+                var url = $(this).attr('data-url');
+                swal({
+                  title: "Habilitar Venda",
+                  text: "Tem certeza que deseja habilitar este fornecedor?",
+                  icon: "warning",
+                  buttons: true,
+                  dangerMode: true,
+                })
+                .then((willDelete) => {
+                  if (willDelete) {
+                    $.ajax({
+                        url: url,
+                        success: function (data) {
+                            swal("Fornecedor habilitado com sucesso!", {
+                              icon: "success",
+                              timer: 3000
+                            });
+                            location.reload();
+                        }
+                    });
+
+                  } else {
+                    swal("Ação cancelada...");
+                  }
+                });
+            });
+
+        });
+    </script>
+
 {% endblock %}

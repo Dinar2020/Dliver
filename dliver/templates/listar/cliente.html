@@ -1,9 +1,10 @@
 {% extends 'adminlte/base.html' %}
-{% block content %}
-    <h1>LISTAGEM DOS CLIENTES</h1>
-    <a href="{% url 'cliente' %}">CADASTRAR CLIENTE</a>
 
-    <table>
+{% block content %}
+    <h1>Página de listagem de cliente</h1>
+    <a class="btn btn-success" href="{% url 'cadastrar_cliente' %}"><i class="fa fa-plus"></i> CADASTRAR CLIENTE</a>
+
+    <table class="table table-striped">
         <thead>
             <th>ID</th>
             <th>NOME</th>
@@ -12,26 +13,42 @@
             <th>DATA DE NASCIMENTO</th>
             <th>CIDADE</th>
             <th>CEP</th>
-            <th>EMAIL</th>
+            <th>EMAIL DO CLIENTE</th>
             <th>TELEFONE</th>
+            <th>OBESERVAÇÃO</th>
+
         </thead>
         <tbody>
-    {% for obj_cliente in object_cliente %}
+    {% for obj_cliente in object_list %}
             <tr>
-                <td>{{obj_produto.pk}}</td>
-                <td>{{obj_produto.nome}}</td>
-                <td>{{obj_produto.cpf}}</td>
-                <td>{{obj_produto.endere}}</td>
-                <td>{{obj_produto.data_de_nascimento}}</td>
-                <td>{{obj_produto.cidade}}</td>
-                <td>{{obj_produto.cep}}</td>
-                <td>{{obj_produto.email_Cliente}}</td>
-                <td>{{obj_produto.tel}}</td>
+                <td>{{obj_cliente.pk}}</td>
+                {% if obj_cliente.nome|length > 30 %}
+                <td>{{obj_cliente.nome|slice:":30"}}...</td>
+                {% else %}
+                <td>{{obj_cliente.nome|slice:":30"}}</td>
+                {% endif %}
+                <td>{{obj_cliente.cpf}}</td>
+                <td>{{obj_cliente.endere}}</td>
+                <td>{{obj_cliente.data_nascimento}}</td>
+                <td>{{obj_cliente.cidade}}</td>
+                <td>{{obj_cliente.cep}}</td>
+                <td>{{obj_cliente.email_cliente}}</td>
+                <td>{{obj_cliente.tel}}</td>
+                <td>{{obj_cliente.observacao}}</td>
 
-                <td><a href="{% url 'atualizar_cliente' obj_cliente.pk %}">ATUALIZAR</a></td>
+                <td>
+                    <a href="{% url 'corrigir_cliente' obj_cliente.pk %}"><i class="fa fa-edit" rel="tooltip" title="Editar cliente"></i></a>
+                    <a href="{% url 'atualizar_nome_cliente' obj_cliente.pk %}"><i class="fa fa-edit"  rel="tooltip" title="Editar Nome do Cliente"></i></a>
+                    <a href="{% url 'atualizar_telefone_cliente' obj_cliente.pk %}"><i class="fa fa-edit"  rel="tooltip" title="Editar Telefone do Cliente"></i></a>
+                    {% if obj_cliente.excluido is False %}
+                    <a class="desabilitar_cliente" data-url="{% url 'ajax_desabilitar_cliente' obj_cliente.pk %}" href="#"><i class="fa fa-times" rel="tooltip" title="Desabilitar Cliente"></i></a>
+                    {% else %}
+                    <a class="habilitar_cliente" data-url="{% url 'ajax_habilitar_cliente' obj_cliente.pk %}" href="#"><i class="fa fa-check" rel="tooltip" title="Habilitar Cliente"></i></a>
+                    {% endif %}
+                </td>
             </tr>
     {% empty %}
-        <h3>Desculpe, você ainda nao possui clientes cadastrados em seu sistema.
+        <h3>Desculpe, você ainda nao possui vendas cadastradas em seu sistema.
             <br/>:'(</h3>
     {% endfor %}
         </tbody>
@@ -41,8 +58,8 @@
         <div class="pagination">
             <span class="step-links">
                 {% if page_obj.has_previous %}
-                    <a href="?page=1">&laquo; Primeira Página |</a>
-                    <a href="?page={{ page_obj.previous_page_number }}">Página Anterior </a>
+                    <a class="btn btn-default" href="?page=1">&laquo; Primeira Página </a>
+                <a class="btn btn-primary" href="?page={{ page_obj.previous_page_number }}"><i class="fa fa-arrow-left"></i> Página Anterior </a>
                 {% endif %}
 
                 <span class="current">
@@ -50,10 +67,93 @@
                 </span>
 
                 {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}">Próxima Página</a>
-                    <a href="?page={{ page_obj.paginator.num_pages }}">| Última Página &raquo;</a>
+                    <a class="btn btn-primary" href="?page={{ page_obj.next_page_number }}">Próxima Página <i class="fa fa-arrow-right"></i></a>
+                    <a class="btn btn-default" href="?page={{ page_obj.paginator.num_pages }}">| Última Página &raquo;</a>
                 {% endif %}
             </span>
         </div>
     {% endif %}
+{% endblock %}
+
+
+{% block javascript %}
+{% include 'adminlte/lib/_scripts.html' %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Vai ser executado apenas após a página estar pronta. Ou seja, carregada.
+
+            // Clicando no ícone de desabilitar
+            $(".desabilitar_cliente").click(function() {
+                //Capturando o valor da propriedate "data-url" que está na tag do ícone com a classe "desabilitar-venda"
+                var url = $(this).attr('data-url');
+
+                //Abrindo o nosso modal (popup) do SweetAlert com as opções de "confirmação de açao" e "cancelar ação"
+                swal({
+                  title: "Desabilitar Cliente",
+                  text: "Tem certeza que deseja desabilitar este cliente?",
+                  icon: "warning",
+                  buttons: true,
+                  dangerMode: true,
+                })
+                .then((willDelete) => {
+                  if (willDelete) {
+
+                    //Se clicar na ação de confirmar a deleção, irá iniciar o AJAX
+                    $.ajax({
+                        url: url,
+                        success: function (data) {
+
+                            //No sucesso do AJAX, irá exibir uma modal com SweetAlert informando que a desabilitação foi realizada com sucesso
+                            swal("Cliente desabilitado com sucesso!", {
+                              icon: "success",
+                              timer: 3000
+                            });
+
+                            //Recarregando a página
+                            location.reload();
+                        }
+                    });
+
+                  } else {
+
+                    //Exibindo o SweetAlert caso o usuário cancele a ação
+                    swal("Ação cancelada...");
+                  }
+                });
+            });
+
+            //Clicando no ícone de habilitar
+            $(".habilitar_cliente").click(function() {
+                var url = $(this).attr('data-url');
+                swal({
+                  title: "Habilitar Cliente",
+                  text: "Tem certeza que deseja habilitar este cliente?",
+                  icon: "warning",
+                  buttons: true,
+                  dangerMode: true,
+                })
+                .then((willDelete) => {
+                  if (willDelete) {
+                    $.ajax({
+                        url: url,
+                        success: function (data) {
+                            swal("Cliente habilitado com sucesso!", {
+                              icon: "success",
+                              timer: 3000
+                            });
+                            location.reload();
+                        }
+                    });
+
+                  } else {
+                    swal("Ação cancelada...");
+                  }
+                });
+            });
+
+        });
+    </script>
+
 {% endblock %}
